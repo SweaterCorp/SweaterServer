@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ZebraMain.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("api")]
   [ApiController]
   public class ValuesController : ControllerBase
   {
+
+
+
     // GET api/values
     [HttpGet]
     public ActionResult<IEnumerable<string>> Get()

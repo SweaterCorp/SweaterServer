@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZebraMain", "ZebraMain\Zebr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZebraData", "Data\ZebraData.csproj", "{F40CC629-56F2-4692-819D-FA76F49E04EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibraries", "CommonLibraries\CommonLibraries.csproj", "{465CECD8-1528-43F7-91FC-0A7AEFA5C406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLibraries", "..\CommonLibraries\CommonLibraries\CommonLibraries.csproj", "{A27DE594-E7D0-4F46-ACFB-3F10F23C6CA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{F40CC629-56F2-4692-819D-FA76F49E04EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F40CC629-56F2-4692-819D-FA76F49E04EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F40CC629-56F2-4692-819D-FA76F49E04EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{465CECD8-1528-43F7-91FC-0A7AEFA5C406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{465CECD8-1528-43F7-91FC-0A7AEFA5C406}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{465CECD8-1528-43F7-91FC-0A7AEFA5C406}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{465CECD8-1528-43F7-91FC-0A7AEFA5C406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A27DE594-E7D0-4F46-ACFB-3F10F23C6CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A27DE594-E7D0-4F46-ACFB-3F10F23C6CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A27DE594-E7D0-4F46-ACFB-3F10F23C6CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A27DE594-E7D0-4F46-ACFB-3F10F23C6CA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
