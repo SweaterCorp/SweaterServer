@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonLibraries\CommonLibraries\CommonLibraries.csproj" />
+  </ItemGroup>
+
 </Project>

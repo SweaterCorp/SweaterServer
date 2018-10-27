@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZebraData.Entities
 {
-  [Table("ColorType")]
-  public class StyleTypeEntity : InernationalName
+  [Table("Style")]
+  public class StyleEntity : InernationalName
   {
     [Key]
-    public int StyleTypeId { get; set; }
+    public int StyleId { get; set; }
   }
 }

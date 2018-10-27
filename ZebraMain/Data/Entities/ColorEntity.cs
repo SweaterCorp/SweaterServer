@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZebraData.Entities
 {
-  [Table("ColorType")]
-  public class ColorTypeEntity : InernationalName
+  [Table("Color")]
+  public class ColorEntity : InernationalName
   {
     [Key]
-    public int ColorTypeId { get; set; }
+    public int ColorId { get; set; }
 
     public string Hex { get; set; }
   }

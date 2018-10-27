@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ZebraData.Entities
 {
-  [Table("Brand")]
+  [Table("Category")]
   public class CategoryEntity : InernationalName
   {
     [Key]
