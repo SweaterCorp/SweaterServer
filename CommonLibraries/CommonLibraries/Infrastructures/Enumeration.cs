@@ -7,8 +7,8 @@ namespace CommonLibraries.Infrastructures
 {
   public class Enumeration : IComparable, IEquatable<Enumeration>
   {
-    public string Value { get; private set; }
-    public int Id { get; private set; }
+    public string Name { get; }
+    public int Id { get; }
 
     protected Enumeration()
     {
@@ -17,7 +17,7 @@ namespace CommonLibraries.Infrastructures
     protected Enumeration(int id, string name)
     {
       Id = id;
-      Value = name;
+      Name = name;
     }
 
     public int CompareTo(object other)
@@ -25,19 +25,12 @@ namespace CommonLibraries.Infrastructures
       return Id.CompareTo(((Enumeration) other).Id);
     }
 
-    public bool Equals(Enumeration other)
-    {
-      if (ReferenceEquals(null, other)) return false;
-      if (ReferenceEquals(this, other)) return true;
-      return Id == other.Id;
-    }
-
     public override string ToString()
     {
-      return Value;
+      return Name;
     }
 
-    public static IEnumerable<T> GetAll<T>() where T : Enumeration
+    protected static IEnumerable<T> GetAll<T>() where T : Enumeration
     {
       var fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
       return fields.Select(field => field.GetValue(null)).Cast<T>();
@@ -52,12 +45,15 @@ namespace CommonLibraries.Infrastructures
       return typeMatches && valueMatches;
     }
 
+    public bool Equals(Enumeration other)
+    {
+      if (ReferenceEquals(null, other)) return false;
+      return ReferenceEquals(this, other) || Id.Equals(other.Id);
+    }
+
     public override int GetHashCode()
     {
-      unchecked
-      {
-        return ((Value != null ? Value.GetHashCode() : 0) * 397) ^ Id;
-      }
+      return Id;
     }
 
     public static bool operator ==(Enumeration left, Enumeration right)
@@ -69,5 +65,17 @@ namespace CommonLibraries.Infrastructures
     {
       return !Equals(left, right);
     }
+
+    protected static T FromString<T>(string name, IEnumerable<T> list) where T : Enumeration
+    {
+      return list.Single(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    protected static T FromValue<T>(int id, IEnumerable<T> list) where T : Enumeration
+    {
+      return list.Single(r => r.Id == id);
+    }
+
+    
   }
 }
