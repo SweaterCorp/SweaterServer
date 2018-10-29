@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommonLibraries;
+using CommonLibraries.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ZebraData;
 
 namespace ZebraMain
 {
@@ -30,18 +33,16 @@ namespace ZebraMain
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-      //services.AddCors(options =>
-      //{
-      //  options.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-      //});
-      //services.AddDbContext<TwoButtonsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TwoButtonsConnection")));
-      //services.Configure<ConnectionStrings>(options => options.TwoButtonsConnection = Configuration.GetConnectionString("TwoButtonsConnection"));
+      services.AddCors(options =>
+      {
+        options.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+      });
+      services.AddDbContext<ZebraMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZebraMainConnection")));
+      services.Configure<ConnectionStrings>(options => options.ZebraConnection = Configuration.GetConnectionString("ZebraMainConnection"));
       //services.AddTransient<QuestionsUnitOfWork>();
-      //services.AddOptions();
-      //services.Configure<ServersSettings>(Configuration.GetSection("ServersSettings"));
-      //services.Configure<MediaConverterSettings>(Configuration.GetSection("MediaConverterSettings"));
-      //services.AddSingleton<MediaConverter>();
-      //services.AddConnectionsHub();
+      services.AddOptions();
+      services.Configure<ServersSettings>(Configuration.GetSection("ServersSettings"));
+    
 
 
       //var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtSettings));
@@ -75,7 +76,7 @@ namespace ZebraMain
     {
       if (env.IsDevelopment()) loggerFactory.AddConsole(Configuration.GetSection("Logging"));
       loggerFactory.AddDebug();
-     // app.UseExceptionHandling();
+     app.UseExceptionHandling();
 
       app.UseDefaultFiles();
       app.UseStaticFiles();

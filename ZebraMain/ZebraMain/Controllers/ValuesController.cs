@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ZebraData;
+using ZebraData.Entities;
 
 namespace ZebraMain.Controllers
 {
@@ -10,14 +12,18 @@ namespace ZebraMain.Controllers
   [ApiController]
   public class ValuesController : ControllerBase
   {
+    ZebraMainContext _db;
 
-
+    public ValuesController(ZebraMainContext db)
+    {
+      _db = db;
+    }
 
     // GET api/values
     [HttpGet]
-    public ActionResult<IEnumerable<string>> Get()
+    public ActionResult<IEnumerable<ProductEntity>> Get()
     {
-      return new string[] { "value1", "value2" };
+      return _db.ProductEntities.ToList();
     }
 
     // GET api/values/5
