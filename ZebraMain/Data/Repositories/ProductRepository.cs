@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ZebraData.Entities;
+using ZebraData.Entities.ProductGroup;
 
 namespace ZebraData.Repositories
 {

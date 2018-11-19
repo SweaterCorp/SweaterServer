@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ZebraData.Entities;
+using ZebraData.Entities.ProductGroup;
 
 namespace ZebraData
 {
@@ -10,7 +11,7 @@ namespace ZebraData
     public virtual DbSet<ColorEntity> ColorEntities { get; set; }
     public virtual DbSet<ProductEntity> ProductEntities { get; set; }
     public virtual DbSet<ProductPhotoEntity> ProductPhotoEntities { get; set; }
-    public virtual DbSet<ProductSizeEntity> ProductSizeEntities { get; set; }
+    public virtual DbSet<ProductSizeTypeEntity> ProductSizeEntities { get; set; }
     public virtual DbSet<SizeEntity> SizeEntities { get; set; }
     public virtual DbSet<StyleEntity> StyleEntities { get; set; }
 
@@ -20,7 +21,7 @@ namespace ZebraData
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<ProductSizeEntity>().HasKey(x => new {x.ProductId, x.SizeId});
+      modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new {x.ProductId, x.SizeId});
     }
   }
 }

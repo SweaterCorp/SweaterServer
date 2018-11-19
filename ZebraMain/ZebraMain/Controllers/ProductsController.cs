@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ZebraData;
 using ZebraData.Entities;
+using ZebraData.Entities.ProductGroup;
 
 namespace ZebraMain.Controllers
 {

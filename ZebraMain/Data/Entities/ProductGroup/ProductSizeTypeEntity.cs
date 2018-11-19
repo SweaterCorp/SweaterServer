@@ -1,15 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ZebraData.Entities
+namespace ZebraData.Entities.ProductGroup
 {
   [Table("ProductSize")]
-  public class ProductSizeEntity
+  public class ProductSizeTypeEntity
   {
     public int ProductId { get; set; }
-    public int SizeId { get; set; }
-    public int ColorId { get; set; }
-    public int Count { get; set; }
+    public int SizeTypeId { get; set; }
+    public bool IsAvailable { get; set; }
     public DateTime UpdatedDate { get; set; }
   }
 }

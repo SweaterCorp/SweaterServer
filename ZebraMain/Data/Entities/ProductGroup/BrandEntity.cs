@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ZebraData.Entities
+namespace ZebraData.Entities.ProductGroup
 {
   [Table("Brand")]
   public class BrandEntity
