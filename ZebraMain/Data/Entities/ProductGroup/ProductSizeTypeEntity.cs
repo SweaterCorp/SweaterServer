@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZebraData.Entities.ProductGroup
 {
-  [Table("ProductSize")]
+  [Table("ProductSizeType")]
   public class ProductSizeTypeEntity
   {
     public int ProductId { get; set; }

@@ -11,45 +11,42 @@ namespace ZebraMain.Controllers
 {
   [Route("api")]
   [ApiController]
-  public class ValuesController : ControllerBase
+  public class ProductsController : ControllerBase
   {
     ZebraMainContext _db;
 
-    public ValuesController(ZebraMainContext db)
+    public ProductsController(ZebraMainContext db)
     {
       _db = db;
     }
 
-    // GET api/values
-    [HttpGet]
-    public ActionResult<IEnumerable<ProductEntity>> Get()
+    [HttpGet("categories")]
+    public ActionResult<IEnumerable<CategoryEntity>> GetCategories()
     {
-      return _db.ProductEntities.ToList();
+      return _db.CategoryEntities.ToList();
     }
 
-    // GET api/values/5
-    [HttpGet("{id}")]
-    public ActionResult<string> Get(int id)
+    [HttpGet("sizes")]
+    public ActionResult<IEnumerable<SizeTypeEntity>> GetSizes()
     {
-      return "value";
+      return _db.SizeTypeEntities.ToList();
     }
 
-    // POST api/values
-    [HttpPost]
-    public void Post([FromBody] string value)
+
+    [HttpGet("products/{id}")]
+    public ProductEntity GetProduct(int id)
     {
+      return _db.ProductEntities.FirstOrDefault(x => x.ProductId == id);
     }
 
-    // PUT api/values/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    [HttpGet("products/select")]
+    public ActionResult<IEnumerable<ProductEntity>> SelectProduct([FromQuery] string brand, [FromQuery] string color)
     {
-    }
-
-    // DELETE api/values/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
+      var colorId = _db.ColorTypeEntities.FirstOrDefault(x => x.RussianName == color)?.ColorTypeId ?? 0;
+      var productIds = _db.ProductColorTypeEntities.Where(x => x.ColorTypeId == colorId).ToList();
+      var t = _db.ProductColorTypeEntities.ToList();
+      var brandId = _db.BrandEntities.FirstOrDefault(x => x.Name == brand)?.BrandId ?? 0;
+      return _db.ProductEntities.Where(x=>x.BrandId == brandId).Join(productIds, product => product.ProductId, productColor=>productColor.ProductId, (first, second)=>  first).ToList();
     }
   }
 }

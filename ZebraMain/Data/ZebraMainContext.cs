@@ -8,12 +8,13 @@ namespace ZebraData
   {
     public virtual DbSet<BrandEntity> BrandEntities { get; set; }
     public virtual DbSet<CategoryEntity> CategoryEntities { get; set; }
-    public virtual DbSet<ColorEntity> ColorEntities { get; set; }
+    public virtual DbSet<ColorTypeEntity> ColorTypeEntities { get; set; }
     public virtual DbSet<ProductEntity> ProductEntities { get; set; }
     public virtual DbSet<ProductPhotoEntity> ProductPhotoEntities { get; set; }
-    public virtual DbSet<ProductSizeTypeEntity> ProductSizeEntities { get; set; }
-    public virtual DbSet<SizeEntity> SizeEntities { get; set; }
-    public virtual DbSet<StyleEntity> StyleEntities { get; set; }
+    public virtual DbSet<ProductSizeTypeEntity> ProductSizeTypeEntities { get; set; }
+    public virtual DbSet<ProductColorTypeEntity> ProductColorTypeEntities { get; set; }
+    public virtual DbSet<SizeTypeEntity> SizeTypeEntities { get; set; }
+    public virtual DbSet<PrintTypeEntity>  PrintTypeEntities { get; set; }
 
     public ZebraMainContext(DbContextOptions options) : base(options)
     {
@@ -21,7 +22,8 @@ namespace ZebraData
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new {x.ProductId, x.SizeId});
+      modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new {x.ProductId, x.SizeTypeId});
+      modelBuilder.Entity<ProductColorTypeEntity>().HasKey(x => new { x.ProductId, x.ColorTypeId });
     }
   }
 }
