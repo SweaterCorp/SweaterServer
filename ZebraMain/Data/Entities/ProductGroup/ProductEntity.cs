@@ -11,6 +11,7 @@ namespace ZebraData.Entities.ProductGroup
     public int ProductId { get; set; }
 
     public int BrandId { get; set; }
+    public int ClicksCount { get; set; }
     public string VendorCode { get; set; }
     public bool IsAvailable { get; set; }
     public int CategoryId { get; set; }

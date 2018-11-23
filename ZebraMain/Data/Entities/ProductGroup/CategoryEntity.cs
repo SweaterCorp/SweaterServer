@@ -8,7 +8,7 @@ namespace ZebraData.Entities.ProductGroup
   {
     [Key]
     public int CategoryId { get; set; }
-    public int ClickCounts { get; set; }
+    public int ClicksCount { get; set; }
     public string CategoryPhotoUrl { get; set; }
     public string RussianName { get; set; }
     public string EnglishName { get; set; }
