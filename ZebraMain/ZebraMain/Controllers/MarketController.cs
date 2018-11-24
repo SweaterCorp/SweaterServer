@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Collections.Generic;
 using CommonLibraries.Response;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using ZebraData;
 using ZebraData.Entities.ProductGroup;
 using ZebraData.Repositories;
@@ -12,27 +8,25 @@ using ZebraMain.ViewModels;
 
 namespace ZebraMain.Controllers
 {
-  [Route("api")]
+  [Route("api/market")]
   [ApiController]
-  public class GeneralController : ControllerBase
+  public class MarketController : ControllerBase
   {
     private readonly ProductRepository _db;
-    private readonly IHostingEnvironment _appEnvironment;
 
-    public GeneralController(IHostingEnvironment appEnvironment, ProductRepository db)
+    public MarketController(ProductRepository db)
     {
       _db = db;
-      _appEnvironment = appEnvironment;
     }
 
-    [HttpGet("market/categories")]
+    [HttpGet("categories")]
     public IActionResult GetCategories()
     {
       var categories = _db.GetCategories();
       return new OkResponseResult("Categories", new {Counts = categories.Count, Categories = categories});
     }
 
-    [HttpGet("market/categories/{categoryId}/brands")]
+    [HttpGet("categories/{categoryId}/brands")]
     public IActionResult GetBrands(int categoryId)
     {
       var category = _db.GetCategoryById(categoryId);
@@ -43,7 +37,7 @@ namespace ZebraMain.Controllers
         new CategoryContainerViewModel<BrandEntity>(category, brands.Count, brands));
     }
 
-    [HttpGet("market/categories/{categoryId}/colors")]
+    [HttpGet("categories/{categoryId}/colors")]
     public IActionResult GetColors(int categoryId)
     {
       var category = _db.GetCategoryById(categoryId);
@@ -54,7 +48,7 @@ namespace ZebraMain.Controllers
         new CategoryContainerViewModel<ColorTypeEntity>(category, colors.Count, colors));
     }
 
-    [HttpGet("market/categories/{categoryId}/sizes")]
+    [HttpGet("categories/{categoryId}/sizes")]
     public IActionResult GetSizes(int categoryId)
     {
       var category = _db.GetCategoryById(categoryId);
@@ -65,7 +59,7 @@ namespace ZebraMain.Controllers
         new CategoryContainerViewModel<SizeTypeEntity>(category, sizes.Count, sizes));
     }
 
-    [HttpGet("market/categories/{categoryId}/products")]
+    [HttpGet("categories/{categoryId}/products")]
     public IActionResult SelectProduct(int categoryId, [FromQuery] ProductsFilterViewModel filter)
     {
       var category = _db.GetCategoryById(categoryId);
@@ -84,44 +78,6 @@ namespace ZebraMain.Controllers
 
       return new OkResponseResult($"Products for category:{category.CategoryId} {category.RussianName}.",
         new {Category = category, AllCounts = counts, Data = new {Counts = list.Count, Products = list}});
-    }
-
-    [HttpPost("media/photo/file/upload")]
-    public IActionResult UploadUserPhotoViaFile(UploadPhotoViewModel uploadPhoto)
-    {
-      
-      return new OkResponseResult($"hello", _appEnvironment);
-    }
-
-    [HttpGet("media/photo/url/upload")]
-    public IActionResult UploadUserPhotoViaUrl([FromQuery] int userId, [FromQuery] string url)
-    {
-      return new OkResponseResult($"hello", _appEnvironment);
-      //if (!ModelState.IsValid) return new BadResponseResult(ModelState);
-
-      //if (MediaService.IsAlreadyDownloaded(background.Url))
-      //  return new OkResponseResult(new UrlViewModel { Url = new Uri(MediaConverter.ToFullBackgroundurlUrl(background.Url, BackgroundSizeType.Original)).LocalPath });
-
-
-      //var url = MediaService.UploadBackground(background.Url, background.BackgroundType)
-      //  .FirstOrDefault(x => x.Size == BackgroundSizeType.Original)?.Url;
-      //return url.IsNullOrEmpty()
-      //  ? new ResponseResult((int)HttpStatusCode.NotModified)
-      //  : new OkResponseResult(new UrlViewModel { Url = url });
-    }
-
-    [HttpGet("monitoring/click/category")]
-    public IActionResult IncrementCategoryClickCount([FromQuery] int categoryId)
-    {
-      _db.IncrementClickCategory(categoryId);
-      return new OkResponseResult("Click was added.");
-    }
-
-    [HttpGet("monitoring/click/product")]
-    public IActionResult IncrementProductClicksCount([FromQuery] int productId)
-    {
-      _db.IncrementClickProduct(productId);
-      return new OkResponseResult("Click was added.");
     }
   }
 }
