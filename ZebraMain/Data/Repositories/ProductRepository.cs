@@ -14,11 +14,10 @@ namespace ZebraData.Repositories
       _db = db;
     }
 
-    public List<SizeTypeEntity> GetAllSizes(int categoryId)
-    {
-      return _db.SizeTypeEntities.FromSql(
-          $"SELECT * FROM [dbo].[ufnGetSizes]({categoryId})").ToList();
 
+    public CategoryEntity GetCategoryById(int categoryId)
+    {
+      return _db.CategoryEntities.FirstOrDefault(x => x.CategoryId == categoryId);
     }
 
     public List<CategoryEntity> GetCategories()
@@ -26,43 +25,108 @@ namespace ZebraData.Repositories
       return _db.CategoryEntities.ToList();
     }
 
+    public List<SizeTypeEntity> GetCategorySizes(int categoryId)
+    {
+      return _db.SizeTypeEntities.FromSql(
+          $"SELECT * FROM [dbo].[[ufnGetCategorySizes]]({categoryId})").ToList();
+
+    }
+    public List<ColorTypeEntity> GetCategoryColors(int categoryId)
+    {
+      return _db.ColorTypeEntities.FromSql(
+        $"SELECT * FROM [dbo].[ufnGetCategoryColors]({categoryId})").ToList();
+
+    }
+
+    public List<BrandEntity> GetCategoryBrands(int categoryId)
+    {
+      return _db.BrandEntities.FromSql(
+        $"SELECT * FROM [dbo].[ufnGetCategoryBrands]({categoryId})").ToList();
+
+    }
+
     public void IncrementClickCategory(int categoryId)
     {
-      CategoryEntity category = _db.CategoryEntities.First(x => x.CategoryId == categoryId);
-      category.ClickCounts++;
+      var category = _db.CategoryEntities.First(x => x.CategoryId == categoryId);
+      category.ClicksCount++;
       _db.SaveChanges();
     }
 
     public void IncrementClickProduct(int productId)
     {
-      ProductEntity product = _db.ProductEntities.First(x => x.ProductId == productId);
-      product.ClickCounts++;
+      var product = _db.ProductEntities.First(x => x.ProductId == productId);
+      product.ClicksCount++;
       _db.SaveChanges();
     }
 
-    public List<ProductCardDto> SelectProducts(int categoryId, decimal minimalPrice, decimal maximalPrice, List<int> sizesIds, int offset, int count)
+    // TODO
+    // Дублирование переписать потом
+    public (int counts, List<ProductCardDto> list) SelectProducts(ProductsFilterDto filter, int offset, int count)
     {
+      int allCounts = 0;
+      IQueryable<ProductEntity> products;
 
-      var result = (from product in _db.ProductEntities.Where(x => x.CategoryId == categoryId && x.Price >= minimalPrice && x.Price <= maximalPrice)
-                                                 join brand in _db.BrandEntities on product.BrandId equals brand.BrandId
-                                                 select new ProductCardDto { Product = product, Brand = brand }).Skip(offset).Take(count).ToList();
+      if (filter.BrandsIds.Any())
+      {
+        products = _db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice &&
+                                                  x.Price <= filter.MaximalPrice &&
+                                                  filter.BrandsIds.Contains(x.BrandId));
+      }
+      else
+      {
+        products = _db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice &&
+                                                  x.Price <= filter.MaximalPrice);
+      }
+
+
+
+      var resultQuery = (from product in products
+                                     join brand in _db.BrandEntities on product.BrandId equals brand.BrandId
+                                     select new ProductCardDto { Product = product, Brand = brand });
+      allCounts = resultQuery.Count();
+      var result = resultQuery.Skip(offset).Take(count).ToList();
       var ids = result.Select(x => x.Product.ProductId).ToList();
       var sizes = GetProductsSizes(ids);
       var colors = GetProductsColors(ids);
 
-      foreach (var productCardDto in result)
+      if (filter.SizesIds.Any())
       {
-        productCardDto.Sizes = sizes.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Sizes.Where(x=>sizesIds.Contains(x.SizeTypeId)).ToList() ??
-                               new List<SizeTypeEntity>();
+        foreach (var productCardDto in result)
+        {
+          productCardDto.Sizes = sizes.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Sizes
+                                   .Where(x => filter.SizesIds.Contains(x.SizeTypeId)).ToList() ??
+                                 new List<SizeTypeEntity>();
+        }
+      }
+      else
+      {
+        foreach (var productCardDto in result)
+        {
+          productCardDto.Sizes = sizes.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Sizes.ToList() ??
+                                 new List<SizeTypeEntity>();
+        }
       }
 
-      foreach (var productCardDto in result)
+      if (filter.ColorsIds.Any())
       {
-        productCardDto.Colors = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Colors.ToList() ??
-                               new List<ColorTypeEntity>();
+
+        foreach (var productCardDto in result)
+        {
+          productCardDto.Colors = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Colors
+                                    .Where(x => filter.ColorsIds.Contains(x.ColorTypeId)).ToList() ??
+                                  new List<ColorTypeEntity>();
+        }
+      }
+      else
+      {
+        foreach (var productCardDto in result)
+        {
+          productCardDto.Colors = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Colors.ToList() ??
+                                  new List<ColorTypeEntity>();
+        }
       }
 
-      return result.Where(x=>x.Sizes.Any()).ToList();
+      return (allCounts, result.Where(x => x.Sizes.Any()).ToList());
     }
 
 
@@ -70,7 +134,7 @@ namespace ZebraData.Repositories
     {
       return _db.ProductSizeTypeEntities.Where(productSize => productsIds.Contains(productSize.ProductId)).GroupJoin(
         _db.SizeTypeEntities, productSize => productSize.SizeTypeId, size => size.SizeTypeId,
-        (productSize, sizes) => new ProductSize {ProductId = productSize.ProductId, Sizes = sizes.Select(x => x)}).ToList();
+        (productSize, sizes) => new ProductSize { ProductId = productSize.ProductId, Sizes = sizes.Select(x => x) }).ToList();
     }
 
     private List<ProductColors> GetProductsColors(ICollection<int> productsIds)
