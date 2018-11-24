@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ZebraMain.ViewModels
 {
-  public class GenericListResponseViewModel<T>
+  public class ListResponseViewModel<T>
   {
     public int Count { get; set; }
 
