@@ -28,7 +28,7 @@ namespace ZebraData.Repositories
     public List<SizeTypeEntity> GetCategorySizes(int categoryId)
     {
       return _db.SizeTypeEntities.FromSql(
-          $"SELECT * FROM [dbo].[[ufnGetCategorySizes]]({categoryId})").ToList();
+          $"SELECT * FROM [dbo].[ufnGetCategorySizes]({categoryId})").ToList();
 
     }
     public List<ColorTypeEntity> GetCategoryColors(int categoryId)
@@ -126,7 +126,7 @@ namespace ZebraData.Repositories
         }
       }
 
-      return (allCounts, result.Where(x => x.Sizes.Any()).ToList());
+      return (allCounts, result.Where(x => x.Sizes.Any() && x.Colors.Any() && x.Brand != null && x.Product != null).ToList());
     }
 
 
