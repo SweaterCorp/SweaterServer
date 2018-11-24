@@ -1,69 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CommonLibraries.Response;
+﻿using CommonLibraries.Response;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using ZebraData;
-using ZebraData.Entities;
 using ZebraData.Entities.ProductGroup;
 using ZebraData.Repositories;
+using ZebraMain.ViewModels;
 
 namespace ZebraMain.Controllers
 {
   [Route("api")]
   [ApiController]
-  public class ProductsController : ControllerBase
+  public class GeneralController : ControllerBase
   {
-    ProductRepository _db;
+    private ProductRepository _db;
 
-    public ProductsController(ProductRepository db)
+    public GeneralController(ProductRepository db)
     {
       _db = db;
     }
 
-    [HttpGet("categories")]
-    public ActionResult<IEnumerable<CategoryEntity>> GetCategories()
+    [HttpGet("market/categories")]
+    public IActionResult GetCategories()
     {
-      return _db.CategoryEntities.ToList();
+      var categories = _db.GetCategories();
+      return new OkResponseResult("Categories", new { Counts = categories.Count, Categories = categories });
     }
 
-    [HttpGet("sizes")]
-    public ActionResult<IEnumerable<SizeTypeEntity>> GetSizes()
+    [HttpGet("market/categories/{categoryId}/brands")]
+    public IActionResult GetBrands(int categoryId)
     {
-      return _db.SizeTypeEntities.ToList();
+      var category = _db.GetCategoryById(categoryId);
+
+      var brands = _db.GetCategoryBrands(categoryId);
+
+      return new OkResponseResult($"Brands for {JsonConvert.SerializeObject(category)}", new { Counts = brands.Count, Brands = brands });
     }
 
-
-    [HttpGet("products/{id}")]
-    public ProductEntity GetProduct(int id)
+    [HttpGet("market/categories/{categoryId}/colors")]
+    public IActionResult GetColors(int categoryId)
     {
-      return _db.ProductEntities.FirstOrDefault(x => x.ProductId == id);
+      var category = _db.GetCategoryById(categoryId);
+
+      var colors = _db.GetCategoryColors(categoryId);
+
+      return new OkResponseResult($"Colors for {JsonConvert.SerializeObject(category)}",
+        new { Counts = colors.Count, Colors = colors });
     }
 
-    [HttpGet("products/select")]
-    public ActionResult<IEnumerable<ProductEntity>> SelectProduct([FromQuery] string brand, [FromQuery] string color)
+    [HttpGet("market/categories/{categoryId}/sizes")]
+    public IActionResult GetSizes(int categoryId)
     {
-      var colorId = _db.ColorTypeEntities.FirstOrDefault(x => x.RussianName == color)?.ColorTypeId ?? 0;
-      var productIds = _db.ProductColorTypeEntities.Where(x => x.ColorTypeId == colorId).ToList();
-      var t = _db.ProductColorTypeEntities.ToList();
-      var brandId = _db.BrandEntities.FirstOrDefault(x => x.Name == brand)?.BrandId ?? 0;
-      return _db.ProductEntities.Where(x => x.BrandId == brandId).Join(productIds, product => product.ProductId, productColor => productColor.ProductId, (first, second) => first).ToList();
+      var category = _db.GetCategoryById(categoryId);
+
+      var sizes = _db.GetCategorySizes(categoryId);
+
+      return new OkResponseResult($"Sizes for {JsonConvert.SerializeObject(category)}", new { Counts = sizes.Count, Sizes = sizes });
     }
 
-    [HttpGet("products/select")]
-    public ActionResult<IEnumerable<ProductEntity>> SelectProduct([FromQuery] string brand, [FromQuery] string color)
+    [HttpGet("market/categories/{categoryId}/products")]
+    public IActionResult SelectProduct(int categoryId, [FromQuery]ProductsFilterViewModel filter)
     {
-      var colorId = _db.ColorTypeEntities.FirstOrDefault(x => x.RussianName == color)?.ColorTypeId ?? 0;
-      var productIds = _db.ProductColorTypeEntities.Where(x => x.ColorTypeId == colorId).ToList();
-      var t = _db.ProductColorTypeEntities.ToList();
-      var brandId = _db.BrandEntities.FirstOrDefault(x => x.Name == brand)?.BrandId ?? 0;
-      return _db.ProductEntities.Where(x=>x.BrandId == brandId).Join(productIds, product => product.ProductId, productColor=>productColor.ProductId, (first, second)=>  first).ToList();
+      var category = _db.GetCategoryById(categoryId);
+
+      var (counts, list) =
+        _db.SelectProducts(
+          new ProductsFilterDto
+          {
+            CategoryId = categoryId,
+            MinimalPrice = filter.MinimalPrice,
+            MaximalPrice = filter.MaximalPrice,
+            BrandsIds = filter.BrandsIds,
+            ColorsIds = filter.ColorsIds,
+            SizesIds = filter.SizesIds
+          }, filter.PageParams.Offset, filter.PageParams.Count);
+
+      return new OkResponseResult($"Products for {JsonConvert.SerializeObject(category)}.", new { AllCounts = counts, Counts = list.Count, Products = list });
     }
 
-    public ActionResult IncrementClickCategoryCount([FromQuery] int categoryId)
+    [HttpGet("monitoring/click/category")]
+    public IActionResult IncrementCategoryClickCount([FromQuery] int categoryId)
     {
       _db.IncrementClickCategory(categoryId);
+      return new OkResponseResult();
+    }
+
+    [HttpGet("monitoring/click/product")]
+    public IActionResult IncrementProductClicksCount([FromQuery] int productId)
+    {
+      _db.IncrementClickProduct(productId);
       return new OkResponseResult();
     }
   }
