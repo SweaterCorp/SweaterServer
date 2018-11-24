@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ZebraData;
+using ZebraData.Repositories;
 
 namespace ZebraMain
 {
@@ -39,7 +40,7 @@ namespace ZebraMain
       });
       services.AddDbContext<ZebraMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZebraMainConnection")));
       services.Configure<ConnectionStrings>(options => options.ZebraConnection = Configuration.GetConnectionString("ZebraMainConnection"));
-      //services.AddTransient<QuestionsUnitOfWork>();
+      services.AddTransient<ProductRepository>();
       services.AddOptions();
       services.Configure<ServersSettings>(Configuration.GetSection("ServersSettings"));
     
