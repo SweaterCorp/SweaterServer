@@ -1,14 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Net;
+using Newtonsoft.Json;
 
 namespace CommonLibraries.Response
 {
   public class ResponseObject
   {
     [JsonProperty("status")]
-    public int Status { get; set; }
+    public HttpStatusCode Status { get; set; }
 
     [JsonProperty("message")]
     public string Message { get; set; }
@@ -20,67 +18,28 @@ namespace CommonLibraries.Response
     {
     }
 
-    public ResponseObject(int status, string message, object data)
+    public ResponseObject(HttpStatusCode status, string message, object data)
     {
-
       Message = string.IsNullOrEmpty(message) ? GetDafaultMesage(status) : message;
-      Status = status == 304 ? 500 : status;
-      Data = data;
-    }
-
-    public static string GetDafaultMesage(int statusCode)
-    {
-      switch (statusCode)
-      {
-        case 200: return "OK";
-        case 201: return "CREATED";
-        case 304: return "NOT MODIFIED";
-        case 400: return "BAD REQUEST";
-        case 401: return "UNAUTHORIZED";
-        case 403: return "FORBIDDEN";
-        case 404: return "NOT FOUND";
-        case 409: return "CONFLICT";
-        case 500: return "INTERNAL SERVER ERROR";
-        default: return "DEFAULT INTERNAL SERVER ERROR";
-      }
-    }
-  }
-
-  public class ResponseObject<T>
-  {
-    [JsonProperty("status")]
-    public int Status { get; set; }
-
-    [JsonProperty("message")]
-    public string Message { get; set; }
-
-    [JsonProperty("data")]
-    public T Data { get; set; }
-
-    public ResponseObject()
-    {
-    }
-
-    public ResponseObject(int status, string message, T data)
-    {
       Status = status;
-      Message = message ?? GetDafaultMesage(status);
       Data = data;
     }
 
-    public static string GetDafaultMesage(int statusCode)
+    public static string GetDafaultMesage(HttpStatusCode statusCode)
     {
       switch (statusCode)
       {
-        case 200: return "OK";
-        case 201: return "CREATED";
-        case 304: return "NOT MODIFIED";
-        case 400: return "BAD REQUEST";
-        case 401: return "UNAUTHORIZED";
-        case 403: return "FORBIDDEN";
-        case 404: return "NOT FOUND";
-        case 409: return "CONFLICT";
-        case 500: return "INTERNAL SERVER ERROR";
+        case HttpStatusCode.OK: return "OK";
+        case HttpStatusCode.Created: return "CREATED";
+        case HttpStatusCode.NoContent: return "NO CONTENT";
+        case HttpStatusCode.Accepted: return "UPDATED";
+        case HttpStatusCode.NotModified: return "NOT MODIFIED";
+        case HttpStatusCode.BadRequest: return "BAD REQUEST";
+        case HttpStatusCode.Unauthorized: return "UNAUTHORIZED";
+        case HttpStatusCode.Forbidden: return "FORBIDDEN";
+        case HttpStatusCode.NotFound: return "NOT FOUND";
+        case HttpStatusCode.Conflict: return "CONFLICT";
+        case HttpStatusCode.InternalServerError: return "INTERNAL SERVER ERROR";
         default: return "DEFAULT INTERNAL SERVER ERROR";
       }
     }
