@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace CommonLibraries.Extensions
@@ -9,7 +7,7 @@ namespace CommonLibraries.Extensions
   {
     public static bool IsNullOrEmpty(this string str)
     {
-      return String.IsNullOrEmpty(str);
+      return string.IsNullOrEmpty(str);
     }
 
     public static string GetMd5HashString(this string input, string format = null)
