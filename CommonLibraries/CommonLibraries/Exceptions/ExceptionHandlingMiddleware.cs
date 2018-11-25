@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using CommonLibraries.Exceptions.ApiExceptions;
@@ -38,20 +39,15 @@ namespace CommonLibraries.Exceptions
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-      if (context.Response.StatusCode == 200) context.Response.StatusCode = 500;
+      if (context.Response.StatusCode == (int)HttpStatusCode.OK) context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
       switch (exception)
       {
         case NotFoundException _:
-          context.Response.StatusCode = 404;
+          context.Response.StatusCode = (int)HttpStatusCode.NotFound;
           break;
       }
-      var response =
-        new ResponseObject(context.Response.StatusCode, null, null)
-        {
-          Message = exception.Message,
-          Data = exception.StackTrace
-        };
+      var response = new ResponseObject((HttpStatusCode)context.Response.StatusCode, exception.Message, exception.StackTrace);
 
       var result = JsonConvert.SerializeObject(response);
       context.Response.ContentType = "application/json";
