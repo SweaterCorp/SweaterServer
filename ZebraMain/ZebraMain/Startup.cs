@@ -41,6 +41,7 @@ namespace ZebraMain
       services.AddDbContext<ZebraMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZebraMainConnection")));
       services.Configure<ConnectionStrings>(options => options.ZebraConnection = Configuration.GetConnectionString("ZebraMainConnection"));
       services.AddTransient<ProductRepository>();
+      services.AddTransient<UserRepository>();
       services.AddOptions();
       services.Configure<ServersSettings>(Configuration.GetSection("ServersSettings"));
     
