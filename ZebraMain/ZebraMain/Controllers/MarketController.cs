@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using CommonLibraries.Response;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ZebraData;
 using ZebraData.Entities.ProductGroup;
 using ZebraData.Repositories;
@@ -8,64 +12,92 @@ using ZebraMain.ViewModels;
 
 namespace ZebraMain.Controllers
 {
+  [Produces("application/json")]
+  [EnableCors("AllowAllOrigin")]
   [Route("api/market")]
   [ApiController]
   public class MarketController : ControllerBase
   {
-    private readonly ProductRepository _db;
+    ProductRepository Db { get; }
+    ILogger<MarketController> Logger { get; }
 
-    public MarketController(ProductRepository db)
+    public MarketController(ILogger<MarketController> logger, ProductRepository db)
     {
-      _db = db;
+      Logger = logger;
+      Db = db;
     }
 
     [HttpGet("categories")]
     public IActionResult GetCategories()
     {
-      var categories = _db.GetCategories();
-      return new OkResponseResult("Categories", new {Counts = categories.Count, Categories = categories});
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetCategories)}.Start");
+
+      var categories = Db.GetCategories();
+      var result =  new OkResponseResult("Categories", new {Counts = categories.Count, Categories = categories});
+
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetCategories)}.End");
+      return result;
     }
 
     [HttpGet("categories/{categoryId}/brands")]
     public IActionResult GetBrands(int categoryId)
     {
-      var category = _db.GetCategoryById(categoryId);
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
 
-      var brands = _db.GetCategoryBrands(categoryId);
+      var category = Db.GetCategoryById(categoryId);
+      if (category == null) return new ResponseResult(HttpStatusCode.NotFound, $"There is no category with id:{categoryId}");
 
-      return new OkResponseResult($"Brands for category:{category.CategoryId} {category.RussianName}.",
+      var brands = Db.GetCategoryBrands(categoryId);
+
+      var result =  new OkResponseResult($"Brands for category:{category.CategoryId} {category.RussianName}.",
         new CategoryContainerViewModel<BrandEntity>(category, brands.Count, brands));
+
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.End");
+      return result;
     }
 
     [HttpGet("categories/{categoryId}/colors")]
     public IActionResult GetColors(int categoryId)
     {
-      var category = _db.GetCategoryById(categoryId);
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
+      var category = Db.GetCategoryById(categoryId);
 
-      var colors = _db.GetCategoryColors(categoryId);
+      if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
 
-      return new OkResponseResult($"Colors for category:{category.CategoryId} {category.RussianName}.",
+      var colors = Db.GetCategoryColors(categoryId);
+
+      var result =  new OkResponseResult($"Colors for category:{category.CategoryId} {category.RussianName}.",
         new CategoryContainerViewModel<ColorTypeEntity>(category, colors.Count, colors));
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
+      return result;
     }
 
     [HttpGet("categories/{categoryId}/sizes")]
     public IActionResult GetSizes(int categoryId)
     {
-      var category = _db.GetCategoryById(categoryId);
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
+      var category = Db.GetCategoryById(categoryId);
 
-      var sizes = _db.GetCategorySizes(categoryId);
+      if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
 
-      return new OkResponseResult($"Sizes for category:{category.CategoryId} {category.RussianName}.",
+      var sizes = Db.GetCategorySizes(categoryId);
+
+      var result =  new OkResponseResult($"Sizes for category:{category.CategoryId} {category.RussianName}.",
         new CategoryContainerViewModel<SizeTypeEntity>(category, sizes.Count, sizes));
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
+      return result;
     }
 
     [HttpGet("categories/{categoryId}/products")]
     public IActionResult SelectProduct(int categoryId, [FromQuery] ProductsFilterViewModel filter)
     {
-      var category = _db.GetCategoryById(categoryId);
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
+      var category = Db.GetCategoryById(categoryId);
+
+      if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
 
       (int counts, List<ProductCardDto> list) =
-        _db.SelectProducts(
+        Db.SelectProducts(
           new ProductsFilterDto
           {
             CategoryId = categoryId,
@@ -76,8 +108,10 @@ namespace ZebraMain.Controllers
             SizesIds = filter.SizesIds
           }, filter.PageParams.Offset, filter.PageParams.Count);
 
-      return new OkResponseResult($"Products for category:{category.CategoryId} {category.RussianName}.",
+      var result =  new OkResponseResult($"Products for category:{category.CategoryId} {category.RussianName}.",
         new {Category = category, AllCounts = counts, Data = new {Counts = list.Count, Products = list}});
+      Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
+      return result;
     }
   }
 }
