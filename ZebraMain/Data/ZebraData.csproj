@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <Folder Include="Entities\AccountGroup\" />
-    <Folder Include="Entities\UserGroup\" />
     <Folder Include="Entities\AreaGroup\" />
   </ItemGroup>
 
