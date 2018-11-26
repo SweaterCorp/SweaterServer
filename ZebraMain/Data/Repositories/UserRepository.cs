@@ -106,5 +106,16 @@ namespace ZebraData.Repositories
 
       return result;
     }
+
+    public UserPhotoEntity InsertUserPhoto(int userId, string url)
+    {
+      var userEntity = _db.UserEntities.FirstOrDefault(x => x.UserId == userId) ??
+                       throw new NotFoundException($"There is no user with id: {userId}.");
+      var userPhoto = new UserPhotoEntity {PhotoUrl = url, UserId = userId};
+      _db.UserPhotoEntities.Add(userPhoto);
+      _db.SaveChanges();
+
+      return userPhoto;
+    }
   }
 }
