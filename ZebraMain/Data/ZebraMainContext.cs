@@ -7,7 +7,7 @@ namespace ZebraData
   public class ZebraMainContext : DbContext
   {
 
-    // 
+    // product
 
     public virtual DbSet<BrandEntity> BrandEntities { get; set; }
     public virtual DbSet<CategoryEntity> CategoryEntities { get; set; }
@@ -33,8 +33,9 @@ namespace ZebraData
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new { x.ProductId, x.SizeTypeId });
-      modelBuilder.Entity<ProductColorTypeEntity>().HasKey(x => new { x.ProductId, x.ColorTypeId });
+      //modelBuilder.Entity<UserPhotoEntity>().HasKey(x => new { x. });
+      //modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new { x.ProductId, x.SizeTypeId });
+      //modelBuilder.Entity<ProductColorTypeEntity>().HasKey(x => new { x.ProductId, x.ColorTypeId });
     }
   }
 }

@@ -28,21 +28,22 @@ namespace ZebraMain.Controllers
     }
 
     [HttpPost]
-    public IActionResult CreateUser([FromBody] CreateUserViewModel viewModel)
+    public IActionResult CreateUser([FromBody] UserViewModel viewModel)
     {
       Logger.LogInformation($"{nameof(UserController)}.{nameof(CreateUser)}.Start");
 
-      if (!ModelState.IsValid) return new BadResponseResult(ModelState);
+      if (!IsValidUserViewModel(viewModel))
+      {
+        return new BadResponseResult(ModelState);
+      }
 
       var user = Db.CreateUser(new UserEntity
       {
-        BirthDate = viewModel.BirthDate,
         FirstName = viewModel.FirstName,
-        HumanColorTypeId = viewModel.HumanColorTypeId,
+        HumanColorTypeId = viewModel.HumanColorTypeId.GetValueOrDefault(),
         LastName = viewModel.LastName,
-        SexTypeId = viewModel.SexTypeId,
-        ShapeTypeId = viewModel.ShapeTypeId,
-        UserId = viewModel.UserId
+        SexTypeId = viewModel.SexTypeId.GetValueOrDefault(),
+        ShapeTypeId = viewModel.ShapeTypeId.GetValueOrDefault(),
       });
       var result = new ResponseResult(HttpStatusCode.Created, $"User was created.", new {User = user});
 
@@ -51,12 +52,37 @@ namespace ZebraMain.Controllers
       return result;
     }
 
+    private bool IsValidUserViewModel(UserViewModel user)
+    {
+      var isValid = true;
+      if (!user.HumanColorTypeId.HasValue)
+      {
+        isValid = false;
+        ModelState.AddModelError("HumanColorTypeId", "HumanColorTypeId is null.");
+      }
+      if (!user.ShapeTypeId.HasValue)
+      {
+        isValid = false;
+        ModelState.AddModelError("ShapeTypeId", "ShapeTypeId is null.");
+      }
+      if (!user.SexTypeId.HasValue)
+      {
+        isValid = false;
+        ModelState.AddModelError("SexTypeId", "SexTypeId is null.");
+      }
+      return isValid;
+    }
+
     // For developers only
     [HttpGet("{userId}")]
     public IActionResult GetUser(int userId)
     {
       Logger.LogInformation($"{nameof(UserController)}.{nameof(GetUser)}.Start");
-      if (userId == 0) return Redirect("https://yandex.ru/images/search?text=сюрприз");
+      if (userId == 0)
+      {
+        ModelState.AddModelError($"{nameof(userId)}", $"{nameof(userId)} equals 0. It's impossible.");
+        return new BadResponseResult(ModelState);
+      }
 
       var user = Db.GetUser(userId);
 
@@ -65,79 +91,29 @@ namespace ZebraMain.Controllers
       return result;
     }
 
-    [HttpPatch("{userId}/shape_type")]
-    public IActionResult UpdateUserShapeType(int userId, [FromQuery] int shapeTypeId)
+    [HttpPut("{userId}")]
+    public IActionResult UpdateUser(int userId, [FromQuery] UserViewModel viewModel)
     {
-      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUserShapeType)}.Start");
+      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUser)}.Start");
 
-      if (userId == 0)
+      var oldUser = Db.GetUser(userId);
+      var updatedUser = new UserEntity
       {
-        ModelState.AddModelError($"{nameof(userId)}", $"{nameof(userId)} equals 0. It's impossible.");
-        return new BadResponseResult(ModelState);
-      }
+        FirstName = string.IsNullOrEmpty(viewModel.FirstName) ? oldUser.FirstName : viewModel.FirstName,
+        LastName = string.IsNullOrEmpty(viewModel.LastName) ? oldUser.LastName : viewModel.LastName,
+        SexTypeId = viewModel.SexTypeId ?? oldUser.SexType.SexTypeId,
+        ShapeTypeId = viewModel.ShapeTypeId ?? oldUser.ShapeType.ShapeTypeId,
+        HumanColorTypeId = viewModel.HumanColorTypeId ?? oldUser.HumanColorType.HumanColorTypeId,
+      };
 
-      if (shapeTypeId == 0)
-      {
-        ModelState.AddModelError($"{nameof(shapeTypeId)}", $"{nameof(shapeTypeId)} equals 0. It's impossible.");
-        return new BadResponseResult(ModelState);
-      }
+      var newUser = Db.UpdateUser(userId, updatedUser);
 
-      var newUser = Db.UpdateUserType(userId, shapeTypeId, UserRepository.UpdatedType.Shape);
+     var result = new UpdatedResponseResult("User shape was updated.", newUser);
 
-      var result = new UpdatedResponseResult("User shape was updated.", new {User = newUser});
-
-      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUserShapeType)}.End");
-      return result;
+      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUser)}.End");
+     return result;
     }
 
-    [HttpPatch("{userId}/human_color_type")]
-    public IActionResult UpdateHumanColorType(int userId, [FromQuery] int humanColorTypeId)
-    {
-      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateHumanColorType)}.Start");
-
-      if (userId == 0)
-      {
-        ModelState.AddModelError($"{nameof(userId)}", $"{nameof(userId)} equals 0. It's impossible.");
-        return new BadResponseResult(ModelState);
-      }
-
-      if (humanColorTypeId == 0)
-      {
-        ModelState.AddModelError($"{nameof(humanColorTypeId)}",
-          $"{nameof(humanColorTypeId)} equals 0. It's impossible.");
-        return new BadResponseResult(ModelState);
-      }
-
-      var newUser = Db.UpdateUserType(userId, humanColorTypeId, UserRepository.UpdatedType.HumanColor);
-
-      var result = new UpdatedResponseResult("User was updated.", new {User = newUser});
-
-      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateHumanColorType)}.End");
-      return result;
-    }
-
-    [HttpPatch("{userId}/sex_type")]
-    public IActionResult UpdateUserSexType(int userId, [FromQuery] int sexTypeId)
-    {
-      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUserSexType)}.Start");
-
-      if (userId == 0)
-      {
-        ModelState.AddModelError($"{nameof(userId)}", $"{nameof(userId)} equals 0. It's impossible.");
-        return new BadResponseResult(ModelState);
-      }
-
-      if (sexTypeId == 0)
-      {
-        ModelState.AddModelError($"{nameof(sexTypeId)}", $"{nameof(sexTypeId)} equals 0. It's impossible.");
-        return new BadResponseResult(ModelState);
-      }
-
-      var newUser = Db.UpdateUserType(userId, sexTypeId, UserRepository.UpdatedType.Sex);
-      var result = new UpdatedResponseResult("User sex type was updated.", new {User = newUser});
-
-      Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUserSexType)}.End");
-      return result;
-    }
+    
   }
 }

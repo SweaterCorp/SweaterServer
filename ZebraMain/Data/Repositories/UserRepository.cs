@@ -44,8 +44,11 @@ namespace ZebraData.Repositories
       return result;
     }
 
-    public UserDto CreateUser(UserEntity user)
+    public UserDto UpdateUser(int userId, UserEntity user)
     {
+      var userEntity = _db.UserEntities.FirstOrDefault(x => x.UserId == userId) ??
+                       throw new NotFoundException($"There is no user with id: {userId}.");
+
       var sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == user.SexTypeId) ??
                     throw new NotFoundException($"There is no sex type with id: {user.SexTypeId}.");
       var shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == user.ShapeTypeId) ??
@@ -54,7 +57,11 @@ namespace ZebraData.Repositories
         _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == user.HumanColorTypeId) ??
         throw new NotFoundException($"There is no human color type with id: {user.HumanColorTypeId}.");
 
-      _db.UserEntities.Add(user);
+      userEntity.FirstName = user.FirstName;
+      user.LastName = user.LastName;
+      user.SexTypeId = user.SexTypeId;
+      user.ShapeTypeId = user.ShapeTypeId;
+      user.HumanColorTypeId = user.HumanColorTypeId;
 
       _db.SaveChanges();
 
@@ -72,33 +79,17 @@ namespace ZebraData.Repositories
       return result;
     }
 
-    public UserDto UpdateUserType(int userId, int updatedTypeId, UpdatedType updatedType)
+    public UserDto CreateUser(UserEntity user)
     {
-      var user = _db.UserEntities.FirstOrDefault(x => x.UserId == userId) ??
-                 throw new NotFoundException($"There is no user with id: {userId}.");
+      var sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == user.SexTypeId) ??
+                    throw new NotFoundException($"There is no sex type with id: {user.SexTypeId}.");
+      var shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == user.ShapeTypeId) ??
+                      throw new NotFoundException($"There is no shape type with id: {user.ShapeTypeId}.");
+      var humanColorType =
+        _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == user.HumanColorTypeId) ??
+        throw new NotFoundException($"There is no human color type with id: {user.HumanColorTypeId}.");
 
-      var sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == user.SexTypeId);
-      var humanColorType = _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == user.HumanColorTypeId);
-      var shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == user.SexTypeId);
-
-      switch (updatedType)
-      {
-        case UpdatedType.Shape:
-          shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == updatedTypeId) ??
-                      throw new NotFoundException($"There is no shape type with id: {user.SexTypeId}.");
-          user.ShapeTypeId = updatedTypeId;
-          break;
-        case UpdatedType.HumanColor:
-          humanColorType = _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == updatedTypeId) ??
-                           throw new NotFoundException($"There is no shape type with id: {user.SexTypeId}.");
-          user.HumanColorTypeId = updatedTypeId;
-          break;
-        case UpdatedType.Sex:
-          sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == updatedTypeId) ??
-                    throw new NotFoundException($"There is no shape type with id: {user.SexTypeId}.");
-          user.SexTypeId = updatedTypeId;
-          break;
-      }
+      _db.UserEntities.Add(user);
 
       _db.SaveChanges();
 
