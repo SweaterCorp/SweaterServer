@@ -14,12 +14,12 @@ namespace ZebraMain.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]
-  [Route("api/market")]
+  [Route("api/categories")]
   [ApiController]
   public class MarketController : ControllerBase
   {
-    ProductRepository Db { get; }
-    ILogger<MarketController> Logger { get; }
+    private ProductRepository Db { get; }
+    private ILogger<MarketController> Logger { get; }
 
     public MarketController(ILogger<MarketController> logger, ProductRepository db)
     {
@@ -27,7 +27,7 @@ namespace ZebraMain.Controllers
       Db = db;
     }
 
-    [HttpGet("categories")]
+    [HttpGet]
     public IActionResult GetCategories()
     {
       Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetCategories)}.Start");
@@ -39,7 +39,7 @@ namespace ZebraMain.Controllers
       return result;
     }
 
-    [HttpGet("categories/{categoryId}/brands")]
+    [HttpGet("{categoryId}/brands")]
     public IActionResult GetBrands(int categoryId)
     {
       Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
@@ -56,7 +56,7 @@ namespace ZebraMain.Controllers
       return result;
     }
 
-    [HttpGet("categories/{categoryId}/colors")]
+    [HttpGet("{categoryId}/colors")]
     public IActionResult GetColors(int categoryId)
     {
       Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
@@ -72,7 +72,7 @@ namespace ZebraMain.Controllers
       return result;
     }
 
-    [HttpGet("categories/{categoryId}/sizes")]
+    [HttpGet("{categoryId}/sizes")]
     public IActionResult GetSizes(int categoryId)
     {
       Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
@@ -88,7 +88,7 @@ namespace ZebraMain.Controllers
       return result;
     }
 
-    [HttpGet("categories/{categoryId}/products")]
+    [HttpGet("{categoryId}/products")]
     public IActionResult SelectProduct(int categoryId, [FromQuery] ProductsFilterViewModel filter)
     {
       Logger.LogInformation($"{nameof(MarketController)}.{nameof(GetBrands)}.Start");
