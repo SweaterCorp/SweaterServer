@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CommonLibraries;
+﻿using CommonLibraries;
 using CommonLibraries.Exceptions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using ZebraData;
 using ZebraData.Repositories;
+using ZebraMain.Infrastructure;
 
 namespace ZebraMain
 {
   public class Startup
   {
+    public IConfiguration Configuration { get; }
+
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
     }
-
-    public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
@@ -39,13 +32,13 @@ namespace ZebraMain
         options.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
       });
       services.AddDbContext<ZebraMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZebraMainConnection")));
-      services.Configure<ConnectionStrings>(options => options.ZebraConnection = Configuration.GetConnectionString("ZebraMainConnection"));
+      //services.Configure<ConnectionStrings>(options => options.ZebraConnection = Configuration.GetConnectionString("ZebraMainConnection"));
       services.AddTransient<ProductRepository>();
       services.AddTransient<UserRepository>();
+      services.AddTransient<MediaService>();
       services.AddOptions();
       services.Configure<ServersSettings>(Configuration.GetSection("ServersSettings"));
-    
-
+      services.Configure<MediaSettings>(Configuration.GetSection("MediaFolder"));
 
       //var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtSettings));
       //var secretKey = jwtAppSettingOptions["SecretKey"];
@@ -78,7 +71,7 @@ namespace ZebraMain
     {
       if (env.IsDevelopment()) loggerFactory.AddConsole(Configuration.GetSection("Logging"));
       loggerFactory.AddDebug();
-     app.UseExceptionHandling();
+      app.UseExceptionHandling();
 
       app.UseDefaultFiles();
       app.UseStaticFiles();

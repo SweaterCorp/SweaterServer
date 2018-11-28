@@ -12,5 +12,10 @@ namespace ZebraData.DTOs
     public ShapeTypeEntity ShapeType { get; set; }
     public SexTypeEntity SexType { get; set; }
     public DateTime BirthDate { get; set; }
+
+    public static UserDto GetDefault()
+    {
+      return new UserDto();
+    }
   }
 }

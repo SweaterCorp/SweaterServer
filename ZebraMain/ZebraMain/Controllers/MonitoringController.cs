@@ -25,7 +25,7 @@ namespace ZebraMain.Controllers
       Logger.LogInformation($"{nameof(MonitoringController)}.ctr.End");
     }
 
-    [HttpPut("click/category")]
+    [HttpPatch("click/category")]
     public IActionResult IncrementCategoryClickCount([FromQuery] int categoryId)
     {
       Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClickCount)}.Start");
@@ -37,7 +37,7 @@ namespace ZebraMain.Controllers
       return result;
     }
 
-    [HttpPut("click/product")]
+    [HttpPatch("click/product")]
     public IActionResult IncrementProductClicksCount([FromQuery] int productId)
     {
       Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicksCount)}.Start");
