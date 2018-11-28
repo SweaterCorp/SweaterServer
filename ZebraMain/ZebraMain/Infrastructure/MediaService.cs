@@ -24,15 +24,15 @@ namespace ZebraMain.Infrastructure
 
     public ServerUrl UploadPhotoViaFile(IFormFile file)
     {
-      var result = UploadPhoto(file.FileName, filePath =>
-      {
-        using (var fileStream = new FileStream(filePath, FileMode.Create))
-        {
-          file.CopyTo(fileStream);
-        }
-      });
+      var fileName = CreateFullFileName(file.Name);
+      var originalfileName = AddSizeTypeToPhotoPath(fileName, PhotoSizeType.Original);
 
-      return result;
+      using (var fileStream = new FileStream(originalfileName, FileMode.Create))
+      {
+        file.CopyTo(fileStream);
+      }
+
+      return new ServerUrl(originalfileName);
     }
 
     public ServerUrl UploadPhotoViaUrl(string url)
@@ -40,12 +40,23 @@ namespace ZebraMain.Infrastructure
       var heasers = new WebHeaderCollection {"User-Agent: Other"};
       var client = new WebClient {Headers = heasers};
 
-      var result = UploadPhoto(url, filePath => client.DownloadFile(new Uri(url), filePath));
+      var fileName = CreateFullFileName(url);
+      var originalfileName = AddSizeTypeToPhotoPath(fileName, PhotoSizeType.Original);
 
-      return result;
+      client.DownloadFile(new Uri(url), originalfileName);
+
+      return new ServerUrl(originalfileName);
     }
 
-    private ServerUrl UploadPhoto(string fileName, Action<string> saveMethod)
+    private string AddSizeTypeToPhotoPath(string photoPath, PhotoSizeType photoSizeType)
+    {
+      var ext = Path.GetExtension(photoPath);
+      var name = Path.GetFileNameWithoutExtension(photoPath);
+      var folderName = Path.GetDirectoryName(photoPath);
+      return Path.Combine(folderName, $"{name}_{photoSizeType.ToString().ToLower()}{ext}");
+    }
+
+    private string CreateFullFileName(string fileName)
     {
       var uniqueName = CreateUniqueName(fileName);
       var imageRelativePath = "/" + uniqueName;
@@ -53,10 +64,10 @@ namespace ZebraMain.Infrastructure
 
       var fullpath = Path.Combine(FolderPath, url.ToPcUrl());
 
-      saveMethod.Invoke(fullpath);
-
-      return url;
+      return fullpath;
     }
+
+    
 
     private string CreateUniqueName(string imageName)
     {
