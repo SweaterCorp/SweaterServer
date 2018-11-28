@@ -7,7 +7,7 @@ namespace CommonLibraries.Infrastructures
 {
   public class Enumeration : IComparable, IEquatable<Enumeration>
   {
-    public string Name { get; }
+    public string Key { get; }
     public int Id { get; }
 
     protected Enumeration()
@@ -17,7 +17,7 @@ namespace CommonLibraries.Infrastructures
     protected Enumeration(int id, string name)
     {
       Id = id;
-      Name = name;
+      Key = name;
     }
 
     public int CompareTo(object other)
@@ -27,7 +27,7 @@ namespace CommonLibraries.Infrastructures
 
     public override string ToString()
     {
-      return Name;
+      return Key;
     }
 
     protected static IEnumerable<T> GetAll<T>() where T : Enumeration
@@ -68,7 +68,7 @@ namespace CommonLibraries.Infrastructures
 
     protected static T FromString<T>(string name, IEnumerable<T> list) where T : Enumeration
     {
-      return list.Single(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
+      return list.Single(r => string.Equals(r.Key, name, StringComparison.OrdinalIgnoreCase));
     }
 
     protected static T FromValue<T>(int id, IEnumerable<T> list) where T : Enumeration
@@ -76,6 +76,9 @@ namespace CommonLibraries.Infrastructures
       return list.Single(r => r.Id == id);
     }
 
-    
+    protected static bool IsValid<T>(int id, IEnumerable<T> list) where T : Enumeration
+    {
+      return list.Any(r => r.Id == id);
+    }
   }
 }
