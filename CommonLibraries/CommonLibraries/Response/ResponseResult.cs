@@ -47,6 +47,7 @@ namespace CommonLibraries.Response
       {
         case HttpStatusCode.NoContent: return HttpStatusCode.OK;
         case HttpStatusCode.NotModified: return HttpStatusCode.OK;
+        //case HttpStatusCode.BadRequest: return HttpStatusCode.OK;
         //case HttpStatusCode.NotModified:
         //  return HttpStatusCode.;
         default: return httpStatusCode;
@@ -144,13 +145,12 @@ namespace CommonLibraries.Response
     {
     }
 
-    public BadResponseResult(ModelStateDictionary modelState) : base(HttpStatusCode.BadRequest)
+    public BadResponseResult(ModelStateDictionary modelState) : base(HttpStatusCode.BadRequest, "Validation errors")
     {
       if (modelState.IsValid) throw new ArgumentException("ModelState must be invalid", nameof(modelState));
 
-      var errors = modelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage).ToList();
-      Response.Message = "Validation errors";
-      Response.Data = new {Errors = errors, modelState.Keys, modelState.Values};
+      var errors = modelState.Select(x => new {x.Key, Message = x.Value.Errors.Select(error=> error.ErrorMessage).ToList()}).ToList();
+      Response.Data = new {Errors = errors};
     }
 
     public BadResponseResult(string message, object data) : base(HttpStatusCode.BadRequest, message, data)
