@@ -46,6 +46,7 @@ namespace CommonLibraries.Response
       switch (httpStatusCode)
       {
         case HttpStatusCode.NoContent: return HttpStatusCode.OK;
+        case HttpStatusCode.NotModified: return HttpStatusCode.OK;
         //case HttpStatusCode.NotModified:
         //  return HttpStatusCode.;
         default: return httpStatusCode;
