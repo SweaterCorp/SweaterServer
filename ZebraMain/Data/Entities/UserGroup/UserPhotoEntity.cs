@@ -11,7 +11,6 @@ namespace ZebraData.Entities.UserGroup
     public int UserPhotoId { get; set; }
     public int UserId { get; set; }
     public string PhotoUrl { get; set; }
-    public PhotoSizeType PhotoSizeType { get; set; } = PhotoSizeType.Original;
     public DateTime CreatedDate { get; set; } = DateTime.Now;
   }
 }

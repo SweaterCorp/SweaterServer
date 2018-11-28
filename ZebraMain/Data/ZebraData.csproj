@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Entities\AccountGroup\" />
     <Folder Include="Entities\AreaGroup\" />
+    <Folder Include="Localization\" />
   </ItemGroup>
 
 </Project>

@@ -23,9 +23,9 @@ namespace ZebraData
 
     public DbSet<UserEntity> UserEntities { get; set; }
     public DbSet<UserPhotoEntity> UserPhotoEntities { get; set; }
-    public DbSet<HumanColorTypeEntity> HumanColorTypeEntities { get; set; }
-    public DbSet<SexTypeEntity> SexTypeEntities { get; set; }
-    public DbSet<ShapeTypeEntity> ShapeTypeEntities { get; set; }
+    //public DbSet<HumanColorTypeEntity> HumanColorTypeEntities { get; set; }
+    //public DbSet<SexTypeEntity> SexTypeEntities { get; set; }
+    //public DbSet<ShapeTypeEntity> ShapeTypeEntities { get; set; }
 
     public ZebraMainContext(DbContextOptions options) : base(options)
     {
@@ -33,6 +33,15 @@ namespace ZebraData
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      //modelBuilder.Entity<UserEntity>().Property(a => a.HumanColorType).HasColumnType("int");
+      //modelBuilder.Entity<UserEntity>().Property(a => a.HumanColorType).Ignore(x => x.HumanColorType.Name);
+
+      //modelBuilder.Entity<UserEntity>().Property(a => a.SexType)..HasColumnType("int");
+      //modelBuilder.Entity<UserEntity>().Ignore(x => x.SexType.Name);
+
+      //modelBuilder.Entity<UserEntity>().Property(a => a.ShapeType).HasColumnType("int");
+      //modelBuilder.Entity<UserEntity>().Ignore(x => x.ShapeType.Name);
+
       //modelBuilder.Entity<UserPhotoEntity>().HasKey(x => new { x. });
       //modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new { x.ProductId, x.SizeTypeId });
       //modelBuilder.Entity<ProductColorTypeEntity>().HasKey(x => new { x.ProductId, x.ColorTypeId });

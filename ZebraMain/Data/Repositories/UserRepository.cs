@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CommonLibraries.Exceptions.ApiExceptions;
-using ZebraData.DTOs;
 using ZebraData.Entities.UserGroup;
 
 namespace ZebraData.Repositories
@@ -15,90 +14,33 @@ namespace ZebraData.Repositories
       _db = db;
     }
 
-    public UserDto CreateUser(UserEntity user)
+    public UserEntity CreateUser(UserEntity user)
     {
-      var sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == user.SexTypeId) ??
-                    throw new NotFoundException($"There is no sex type with id: {user.SexTypeId}.");
-      var shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == user.ShapeTypeId) ??
-                      throw new NotFoundException($"There is no shape type with id: {user.ShapeTypeId}.");
-      var humanColorType =
-        _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == user.HumanColorTypeId) ??
-        throw new NotFoundException($"There is no human color type with id: {user.HumanColorTypeId}.");
-
       _db.UserEntities.Add(user);
-
       _db.SaveChanges();
-
-      var result = new UserDto
-      {
-        UserId = user.UserId,
-        BirthDate = user.BirthDate,
-        FirstName = user.FirstName,
-        HumanColorType = humanColorType,
-        LastName = user.LastName,
-        SexType = sexType,
-        ShapeType = shapeType
-      };
-
-      return result;
+      return user;
     }
 
-    public UserDto UpdateUser(int userId, UserEntity user)
+    public UserEntity UpdateUser(int userId, UserEntity user)
     {
       var userEntity = _db.UserEntities.FirstOrDefault(x => x.UserId == userId) ??
                        throw new NotFoundException($"There is no user with id: {userId}.");
 
-      var sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == user.SexTypeId) ??
-                    throw new NotFoundException($"There is no sex type with id: {user.SexTypeId}.");
-      var shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == user.ShapeTypeId) ??
-                      throw new NotFoundException($"There is no shape type with id: {user.ShapeTypeId}.");
-      var humanColorType =
-        _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == user.HumanColorTypeId) ??
-        throw new NotFoundException($"There is no human color type with id: {user.HumanColorTypeId}.");
-
       userEntity.FirstName = user.FirstName;
       user.LastName = user.LastName;
-      user.SexTypeId = user.SexTypeId;
-      user.ShapeTypeId = user.ShapeTypeId;
-      user.HumanColorTypeId = user.HumanColorTypeId;
+      user.SexType = user.SexType;
+      user.ShapeType = user.ShapeType;
+      user.HumanColorType = user.HumanColorType;
 
       _db.SaveChanges();
 
-      var result = new UserDto
-      {
-        UserId = user.UserId,
-        BirthDate = user.BirthDate,
-        FirstName = user.FirstName,
-        HumanColorType = humanColorType,
-        LastName = user.LastName,
-        SexType = sexType,
-        ShapeType = shapeType
-      };
-
-      return result;
+      return user;
     }
 
-    public UserDto GetUser(int userId)
+    public UserEntity GetUser(int userId)
     {
-      var user = _db.UserEntities.FirstOrDefault(x => x.UserId == userId);
-      if (user == null) return UserDto.GetDefault();
-
-      var sexType = _db.SexTypeEntities.FirstOrDefault(x => x.SexTypeId == user.SexTypeId);
-      var humanColorType = _db.HumanColorTypeEntities.FirstOrDefault(x => x.HumanColorTypeId == user.HumanColorTypeId);
-      var shapeType = _db.ShapeTypeEntities.FirstOrDefault(x => x.ShapeTypeId == user.SexTypeId);
-
-      var result = new UserDto
-      {
-        UserId = user.UserId,
-        BirthDate = user.BirthDate,
-        FirstName = user.FirstName,
-        HumanColorType = humanColorType,
-        LastName = user.LastName,
-        SexType = sexType,
-        ShapeType = shapeType
-      };
-
-      return result;
+      var user = _db.UserEntities.FirstOrDefault(x => x.UserId == userId) ?? new UserEntity();
+      return user;
     }
 
     public UserPhotoEntity InsertUserPhoto(int userId, string url)
@@ -112,7 +54,7 @@ namespace ZebraData.Repositories
       return userPhoto;
     }
 
-    public (UserDto user, List<UserPhotoEntity> photos) GetUserWithPhotos(int userId)
+    public (UserEntity user, List<UserPhotoEntity> photos) GetUserWithPhotos(int userId)
     {
       var user = GetUser(userId);
       var photos = _db.UserPhotoEntities.Where(x => x.UserId == userId).ToList();

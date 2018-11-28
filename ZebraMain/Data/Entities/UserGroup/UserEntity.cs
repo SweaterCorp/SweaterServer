@@ -12,9 +12,9 @@ namespace ZebraData.Entities.UserGroup
 
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public int HumanColorTypeId { get; set; }
-    public int ShapeTypeId { get; set; }
-    public int SexTypeId { get; set; }
+    public int HumanColorType { get; set; }
+    public int ShapeType { get; set; }
+    public int SexType { get; set; }
     public DateTime BirthDate { get; set; }
   }
 }
