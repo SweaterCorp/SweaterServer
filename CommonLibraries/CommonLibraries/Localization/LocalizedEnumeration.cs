@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CommonLibraries.Infrastructures;
+using CommonLibraries.Old;
 
 namespace CommonLibraries.Localization
 {
-  public class LocalizedEnumeration : Enumeration
+  public class LocalizedEnumeration : NotEnumeration
   {
     protected List<TranslationName> TranslationNames = new List<TranslationName>();
 

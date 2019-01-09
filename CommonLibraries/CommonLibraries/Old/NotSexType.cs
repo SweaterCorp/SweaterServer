@@ -6,7 +6,7 @@ using CommonLibraries.Localization;
 
 namespace CommonLibraries.Old
 {
-  public class NotSexType : Enumeration
+  public class NotSexType : NotEnumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 

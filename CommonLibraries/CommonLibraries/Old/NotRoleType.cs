@@ -3,7 +3,7 @@ using CommonLibraries.Infrastructures;
 
 namespace CommonLibraries.Old
 {
-  public class NotRoleType : Enumeration
+  public class NotRoleType : NotEnumeration
   {
     public static NotRoleType Guest { get; } = new NotRoleType(0, "Guest");
     public static NotRoleType User { get; } = new NotRoleType(1, "User");
