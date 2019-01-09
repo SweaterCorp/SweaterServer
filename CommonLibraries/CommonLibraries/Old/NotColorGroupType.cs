@@ -4,13 +4,13 @@ using System.Linq;
 using CommonLibraries.Infrastructures;
 using CommonLibraries.Localization;
 
-namespace CommonLibraries.CommonTypes
+namespace CommonLibraries.Old
 {
-  public class ColorGroupType : Enumeration
+  public class NotColorGroupType : Enumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 
-    public static ColorGroupType None { get; } = new ColorGroupType(0, "None", new List<ColorType>())
+    public static NotColorGroupType None { get; } = new NotColorGroupType(0, "None", new List<NotColorType>())
     {
       _translationNames = new List<TranslationName>
       {
@@ -22,8 +22,8 @@ namespace CommonLibraries.CommonTypes
 
     // ---------- 
 
-    public static ColorGroupType RedPink { get; } =
-      new ColorGroupType(1, "RedPink", new List<ColorType> {ColorType.Red, ColorType.Pink})
+    public static NotColorGroupType RedPink { get; } =
+      new NotColorGroupType(1, "RedPink", new List<NotColorType> {NotColorType.Red, NotColorType.Pink})
       {
         _translationNames = new List<TranslationName>
         {
@@ -33,8 +33,8 @@ namespace CommonLibraries.CommonTypes
         }
       };
 
-    public static ColorGroupType OrangeYellow { get; } =
-      new ColorGroupType(2, "OrangeYellow", new List<ColorType> {ColorType.Orange, ColorType.Yellow})
+    public static NotColorGroupType OrangeYellow { get; } =
+      new NotColorGroupType(2, "OrangeYellow", new List<NotColorType> {NotColorType.Orange, NotColorType.Yellow})
       {
         _translationNames = new List<TranslationName>
         {
@@ -44,8 +44,8 @@ namespace CommonLibraries.CommonTypes
         }
       };
 
-    public static ColorGroupType Green { get; } =
-      new ColorGroupType(3, "Green", new List<ColorType> {ColorType.Green})
+    public static NotColorGroupType Green { get; } =
+      new NotColorGroupType(3, "Green", new List<NotColorType> {NotColorType.Green})
       {
         _translationNames = new List<TranslationName>
         {
@@ -55,7 +55,7 @@ namespace CommonLibraries.CommonTypes
         }
       };
 
-    public static ColorGroupType Blue { get; } = new ColorGroupType(4, "Blue", new List<ColorType> {ColorType.Blue})
+    public static NotColorGroupType Blue { get; } = new NotColorGroupType(4, "Blue", new List<NotColorType> {NotColorType.Blue})
     {
       _translationNames = new List<TranslationName>
       {
@@ -65,8 +65,8 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorGroupType Purple { get; } =
-      new ColorGroupType(5, "Purple", new List<ColorType> {ColorType.Purple})
+    public static NotColorGroupType Purple { get; } =
+      new NotColorGroupType(5, "Purple", new List<NotColorType> {NotColorType.Purple})
       {
         _translationNames = new List<TranslationName>
         {
@@ -76,8 +76,8 @@ namespace CommonLibraries.CommonTypes
         }
       };
 
-    public static ColorGroupType BrownBeige { get; } =
-      new ColorGroupType(6, "BrownBeige", new List<ColorType> {ColorType.Brown, ColorType.Beige})
+    public static NotColorGroupType BrownBeige { get; } =
+      new NotColorGroupType(6, "BrownBeige", new List<NotColorType> {NotColorType.Brown, NotColorType.Beige})
       {
         _translationNames = new List<TranslationName>
         {
@@ -87,8 +87,8 @@ namespace CommonLibraries.CommonTypes
         }
       };
 
-    public static ColorGroupType GrayBlackWhite { get; } =
-      new ColorGroupType(7, "GrayBlackWhite", new List<ColorType> {ColorType.Gray, ColorType.Black, ColorType.White})
+    public static NotColorGroupType GrayBlackWhite { get; } =
+      new NotColorGroupType(7, "GrayBlackWhite", new List<NotColorType> {NotColorType.Gray, NotColorType.Black, NotColorType.White})
       {
         _translationNames = new List<TranslationName>
         {
@@ -101,24 +101,24 @@ namespace CommonLibraries.CommonTypes
     public string this[LaguageType laguageType] => _translationNames.FirstOrDefault(x => x.LaguageType == laguageType)
                                                      ?.Name ?? _translationNames[0].Name;
 
-    public List<ColorType> Colors { get; }
+    public List<NotColorType> Colors { get; }
 
-    private ColorGroupType(int id, string name, List<ColorType> colors) : base(id, name)
+    private NotColorGroupType(int id, string name, List<NotColorType> colors) : base(id, name)
     {
       Colors = colors;
     }
 
-    public static IEnumerable<ColorGroupType> List()
+    public static IEnumerable<NotColorGroupType> List()
     {
-      return new List<ColorGroupType> {None, RedPink, OrangeYellow, Green, Blue, Purple, BrownBeige, GrayBlackWhite};
+      return new List<NotColorGroupType> {None, RedPink, OrangeYellow, Green, Blue, Purple, BrownBeige, GrayBlackWhite};
     }
 
-    public static ColorGroupType FromKey(string key)
+    public static NotColorGroupType FromKey(string key)
     {
       return FromString(key, List());
     }
 
-    public static ColorGroupType FromValue(int id)
+    public static NotColorGroupType FromValue(int id)
     {
       return FromValue(id, List());
     }
@@ -128,13 +128,13 @@ namespace CommonLibraries.CommonTypes
       return IsValid(id, List());
     }
 
-    public static implicit operator ColorGroupType(int x)
+    public static implicit operator NotColorGroupType(int x)
     {
       return List().FirstOrDefault(item => item.Id == x) ??
-             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(ColorGroupType)}");
+             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(NotColorGroupType)}");
     }
 
-    public static explicit operator int(ColorGroupType sexType)
+    public static explicit operator int(NotColorGroupType sexType)
     {
       return sexType.Id;
     }
