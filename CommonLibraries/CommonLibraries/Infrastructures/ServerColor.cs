@@ -23,9 +23,20 @@ namespace CommonLibraries.Infrastructures
       RGB = ToRgb(hex);
     }
 
+    public ServerColor(int color)
+    {
+      var hexValue = color.ToString("X");
+      RGB = ToRgb(hexValue);
+    }
+
     public string ToHex()
     {
       return ToHex(RGB);
+    }
+
+    public int ToInt()
+    {
+      return int.Parse(ToHex(), System.Globalization.NumberStyles.HexNumber);
     }
 
     public RGB ToRgb()
