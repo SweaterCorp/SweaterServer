@@ -4,15 +4,15 @@ using System.Linq;
 using CommonLibraries.Infrastructures;
 using CommonLibraries.Localization;
 
-namespace CommonLibraries.CommonTypes
+namespace CommonLibraries.Old
 {
-  public class Category : Enumeration
+  public class NotCategory : Enumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 
     // ------------------------ 
 
-    public static Category None { get; } = new Category(0, "None")
+    public static NotCategory None { get; } = new NotCategory(0, "None")
     {
       _translationNames = new List<TranslationName>
       {
@@ -24,7 +24,7 @@ namespace CommonLibraries.CommonTypes
 
     // ------------------------ 
 
-    public static Category BlousesShirts { get; } = new Category(1, "BlousesShirts")
+    public static NotCategory BlousesShirts { get; } = new NotCategory(1, "BlousesShirts")
     {
       _translationNames = new List<TranslationName>
       {
@@ -34,7 +34,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Trousers { get; } = new Category(2, "Trousers")
+    public static NotCategory Trousers { get; } = new NotCategory(2, "Trousers")
     {
       _translationNames = new List<TranslationName>
       {
@@ -44,7 +44,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Outerwear { get; } = new Category(3, "Outerwear")
+    public static NotCategory Outerwear { get; } = new NotCategory(3, "Outerwear")
     {
       _translationNames = new List<TranslationName>
       {
@@ -54,7 +54,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category JumpersSweatersCardigans { get; } = new Category(4, "JumpersSweatersCardigans")
+    public static NotCategory JumpersSweatersCardigans { get; } = new NotCategory(4, "JumpersSweatersCardigans")
     {
       _translationNames = new List<TranslationName>
       {
@@ -64,7 +64,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Jeans { get; } = new Category(5, "Jeans")
+    public static NotCategory Jeans { get; } = new NotCategory(5, "Jeans")
     {
       _translationNames = new List<TranslationName>
       {
@@ -74,7 +74,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category JacketsSuits { get; } = new Category(6, "JacketsSuits")
+    public static NotCategory JacketsSuits { get; } = new NotCategory(6, "JacketsSuits")
     {
       _translationNames = new List<TranslationName>
       {
@@ -84,7 +84,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Dresses { get; } = new Category(7, "Dresses")
+    public static NotCategory Dresses { get; } = new NotCategory(7, "Dresses")
     {
       _translationNames = new List<TranslationName>
       {
@@ -94,7 +94,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Tracksuits { get; } = new Category(8, "Tracksuits")
+    public static NotCategory Tracksuits { get; } = new NotCategory(8, "Tracksuits")
     {
       _translationNames = new List<TranslationName>
       {
@@ -104,7 +104,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category HoodiesSweatshirts { get; } = new Category(9, "HoodiesSweatshirts")
+    public static NotCategory HoodiesSweatshirts { get; } = new NotCategory(9, "HoodiesSweatshirts")
     {
       _translationNames = new List<TranslationName>
       {
@@ -114,7 +114,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Tops { get; } = new Category(10, "Tops")
+    public static NotCategory Tops { get; } = new NotCategory(10, "Tops")
     {
       _translationNames = new List<TranslationName>
       {
@@ -124,7 +124,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category TshirtsPolo { get; } = new Category(11, "TShirtsPolo")
+    public static NotCategory TshirtsPolo { get; } = new NotCategory(11, "TShirtsPolo")
     {
       _translationNames = new List<TranslationName>
       {
@@ -134,7 +134,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Shorts { get; } = new Category(12, "Shorts")
+    public static NotCategory Shorts { get; } = new NotCategory(12, "Shorts")
     {
       _translationNames = new List<TranslationName>
       {
@@ -144,7 +144,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static Category Skirts { get; } = new Category(13, "Skirts")
+    public static NotCategory Skirts { get; } = new NotCategory(13, "Skirts")
     {
       _translationNames = new List<TranslationName>
       {
@@ -159,13 +159,13 @@ namespace CommonLibraries.CommonTypes
     public string this[LaguageType laguageType] => _translationNames.FirstOrDefault(x => x.LaguageType == laguageType)
                                                      ?.Name ?? _translationNames[0].Name;
 
-    private Category(int id, string name) : base(id, name)
+    private NotCategory(int id, string name) : base(id, name)
     {
     }
 
-    public static IEnumerable<Category> List()
+    public static IEnumerable<NotCategory> List()
     {
-      return new List<Category>
+      return new List<NotCategory>
       {
         None,
         BlousesShirts,
@@ -184,12 +184,12 @@ namespace CommonLibraries.CommonTypes
       };
     }
 
-    public static Category FromKey(string key)
+    public static NotCategory FromKey(string key)
     {
       return FromString(key, List());
     }
 
-    public static Category FromValue(int id)
+    public static NotCategory FromValue(int id)
     {
       return FromValue(id, List());
     }
@@ -199,13 +199,13 @@ namespace CommonLibraries.CommonTypes
       return IsValid(id, List());
     }
 
-    public static implicit operator Category(int x)
+    public static implicit operator NotCategory(int x)
     {
       return List().FirstOrDefault(item => item.Id == x) ??
-             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(Category)}");
+             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(NotCategory)}");
     }
 
-    public static explicit operator int(Category humanColorType)
+    public static explicit operator int(NotCategory humanColorType)
     {
       return humanColorType.Id;
     }
