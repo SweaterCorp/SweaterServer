@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ZebraMain.Infrastructure
+namespace CommonLibraries.Infrastructures
 {
   public class ServerUrl
   {
