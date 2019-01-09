@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using CommonLibraries.Exceptions.ApiExceptions;
 using CommonLibraries.Response;
@@ -21,8 +19,7 @@ namespace CommonLibraries.Exceptions
       _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IHostingEnvironment env,
-      ILogger<ExceptionHandlingMiddleware> logger)
+    public async Task Invoke(HttpContext context, IHostingEnvironment env, ILogger<ExceptionHandlingMiddleware> logger)
     {
       try
       {
@@ -39,15 +36,17 @@ namespace CommonLibraries.Exceptions
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-      if (context.Response.StatusCode == (int)HttpStatusCode.OK) context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+      if (context.Response.StatusCode == (int) HttpStatusCode.OK)
+        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
       switch (exception)
       {
         case NotFoundException _:
-          context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+          context.Response.StatusCode = (int) HttpStatusCode.NotFound;
           break;
       }
-      var response = new ResponseObject((HttpStatusCode)context.Response.StatusCode, exception.Message, exception.StackTrace);
+      var response = new ResponseObject((HttpStatusCode) context.Response.StatusCode, exception.Message,
+        exception.StackTrace);
 
       var result = JsonConvert.SerializeObject(response);
       context.Response.ContentType = "application/json";
