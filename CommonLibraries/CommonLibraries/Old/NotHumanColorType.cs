@@ -4,15 +4,15 @@ using System.Linq;
 using CommonLibraries.Infrastructures;
 using CommonLibraries.Localization;
 
-namespace CommonLibraries.CommonTypes
+namespace CommonLibraries.Old
 {
-  public class HumanColorType : Enumeration
+  public class NotHumanColorType : Enumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 
     // ------------------------ Зима
 
-    public static HumanColorType None { get; } = new HumanColorType(0, "None")
+    public static NotHumanColorType None { get; } = new NotHumanColorType(0, "None")
     {
       _translationNames = new List<TranslationName>
       {
@@ -24,7 +24,7 @@ namespace CommonLibraries.CommonTypes
 
     // ------------------------ Зима
 
-    public static HumanColorType DarkWinter { get; } = new HumanColorType(1, "DarkWinter")
+    public static NotHumanColorType DarkWinter { get; } = new NotHumanColorType(1, "DarkWinter")
     {
       _translationNames = new List<TranslationName>
       {
@@ -34,7 +34,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType ColdWinter { get; } = new HumanColorType(2, "ColdWinter")
+    public static NotHumanColorType ColdWinter { get; } = new NotHumanColorType(2, "ColdWinter")
     {
       _translationNames = new List<TranslationName>
       {
@@ -44,7 +44,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType BrightWinter { get; } = new HumanColorType(3, "BrightWinter")
+    public static NotHumanColorType BrightWinter { get; } = new NotHumanColorType(3, "BrightWinter")
     {
       _translationNames = new List<TranslationName>
       {
@@ -56,7 +56,7 @@ namespace CommonLibraries.CommonTypes
 
     // ------------------------ Осень
 
-    public static HumanColorType SoftAutumn { get; } = new HumanColorType(4, "SoftAutumn")
+    public static NotHumanColorType SoftAutumn { get; } = new NotHumanColorType(4, "SoftAutumn")
     {
       _translationNames = new List<TranslationName>
       {
@@ -66,7 +66,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType WarmAutumn { get; } = new HumanColorType(5, "WarmAutumn")
+    public static NotHumanColorType WarmAutumn { get; } = new NotHumanColorType(5, "WarmAutumn")
     {
       _translationNames = new List<TranslationName>
       {
@@ -76,7 +76,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType DarkAutumn { get; } = new HumanColorType(6, "DarkAutumn")
+    public static NotHumanColorType DarkAutumn { get; } = new NotHumanColorType(6, "DarkAutumn")
     {
       _translationNames = new List<TranslationName>
       {
@@ -88,7 +88,7 @@ namespace CommonLibraries.CommonTypes
 
     // ------------------------ Весна
 
-    public static HumanColorType BrightSpring { get; } = new HumanColorType(7, "BrightSpring")
+    public static NotHumanColorType BrightSpring { get; } = new NotHumanColorType(7, "BrightSpring")
     {
       _translationNames = new List<TranslationName>
       {
@@ -98,7 +98,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType WarmSpring { get; } = new HumanColorType(8, "WarmSpring")
+    public static NotHumanColorType WarmSpring { get; } = new NotHumanColorType(8, "WarmSpring")
     {
       _translationNames = new List<TranslationName>
       {
@@ -108,7 +108,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType LightSpring { get; } = new HumanColorType(9, "LightSpring")
+    public static NotHumanColorType LightSpring { get; } = new NotHumanColorType(9, "LightSpring")
     {
       _translationNames = new List<TranslationName>
       {
@@ -120,7 +120,7 @@ namespace CommonLibraries.CommonTypes
 
     // ------------------------ Лето
 
-    public static HumanColorType LightSummer { get; } = new HumanColorType(10, "LightSummer")
+    public static NotHumanColorType LightSummer { get; } = new NotHumanColorType(10, "LightSummer")
     {
       _translationNames = new List<TranslationName>
       {
@@ -130,7 +130,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType ColdSummer { get; } = new HumanColorType(11, "ColdSummer")
+    public static NotHumanColorType ColdSummer { get; } = new NotHumanColorType(11, "ColdSummer")
     {
       _translationNames = new List<TranslationName>
       {
@@ -140,7 +140,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static HumanColorType SoftSummer { get; } = new HumanColorType(12, "SoftSummer")
+    public static NotHumanColorType SoftSummer { get; } = new NotHumanColorType(12, "SoftSummer")
     {
       _translationNames = new List<TranslationName>
       {
@@ -155,13 +155,13 @@ namespace CommonLibraries.CommonTypes
     public string this[LaguageType laguageType] => _translationNames.FirstOrDefault(x => x.LaguageType == laguageType)
                                                      ?.Name ?? _translationNames[0].Name;
 
-    private HumanColorType(int id, string name) : base(id, name)
+    private NotHumanColorType(int id, string name) : base(id, name)
     {
     }
 
-    public static IEnumerable<HumanColorType> List()
+    public static IEnumerable<NotHumanColorType> List()
     {
-      return new List<HumanColorType>
+      return new List<NotHumanColorType>
       {
         None,
         DarkWinter,
@@ -179,12 +179,12 @@ namespace CommonLibraries.CommonTypes
       };
     }
 
-    public static HumanColorType FromKey(string key)
+    public static NotHumanColorType FromKey(string key)
     {
       return FromString(key, List());
     }
 
-    public static HumanColorType FromValue(int id)
+    public static NotHumanColorType FromValue(int id)
     {
       return FromValue(id, List());
     }
@@ -194,13 +194,13 @@ namespace CommonLibraries.CommonTypes
       return IsValid(id, List());
     }
 
-    public static implicit operator HumanColorType(int x)
+    public static implicit operator NotHumanColorType(int x)
     {
       return List().FirstOrDefault(item => item.Id == x) ??
-             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(HumanColorType)}");
+             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(NotHumanColorType)}");
     }
 
-    public static explicit operator int(HumanColorType humanColorType)
+    public static explicit operator int(NotHumanColorType humanColorType)
     {
       return humanColorType.Id;
     }
