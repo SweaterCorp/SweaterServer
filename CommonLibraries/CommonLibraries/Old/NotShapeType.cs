@@ -4,13 +4,13 @@ using System.Linq;
 using CommonLibraries.Infrastructures;
 using CommonLibraries.Localization;
 
-namespace CommonLibraries.CommonTypes
+namespace CommonLibraries.Old
 {
-  public class ShapeType : Enumeration
+  public class NotShapeType : Enumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 
-    public static ShapeType None { get; } = new ShapeType(0, "None")
+    public static NotShapeType None { get; } = new NotShapeType(0, "None")
     {
       _translationNames = new List<TranslationName>
       {
@@ -20,7 +20,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ShapeType Hourglass { get; } = new ShapeType(1, "Male")
+    public static NotShapeType Hourglass { get; } = new NotShapeType(1, "Male")
     {
       _translationNames = new List<TranslationName>
       {
@@ -30,7 +30,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ShapeType Rectangle { get; } = new ShapeType(2, "Rectangle")
+    public static NotShapeType Rectangle { get; } = new NotShapeType(2, "Rectangle")
     {
       _translationNames = new List<TranslationName>
       {
@@ -40,7 +40,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ShapeType Pear { get; } = new ShapeType(3, "Pear")
+    public static NotShapeType Pear { get; } = new NotShapeType(3, "Pear")
     {
       _translationNames = new List<TranslationName>
       {
@@ -50,7 +50,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ShapeType InvertedTriangle { get; } = new ShapeType(4, "InvertedTriangle")
+    public static NotShapeType InvertedTriangle { get; } = new NotShapeType(4, "InvertedTriangle")
     {
       _translationNames = new List<TranslationName>
       {
@@ -60,7 +60,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ShapeType Apple { get; } = new ShapeType(5, "Apple")
+    public static NotShapeType Apple { get; } = new NotShapeType(5, "Apple")
     {
       _translationNames = new List<TranslationName>
       {
@@ -73,21 +73,21 @@ namespace CommonLibraries.CommonTypes
     public string this[LaguageType laguageType] => _translationNames.FirstOrDefault(x => x.LaguageType == laguageType)
                                                      ?.Name ?? _translationNames[0].Name;
 
-    private ShapeType(int id, string name) : base(id, name)
+    private NotShapeType(int id, string name) : base(id, name)
     {
     }
 
-    public static IEnumerable<ShapeType> List()
+    public static IEnumerable<NotShapeType> List()
     {
-      return new List<ShapeType> {None, Hourglass, Rectangle, Pear, InvertedTriangle, Apple};
+      return new List<NotShapeType> {None, Hourglass, Rectangle, Pear, InvertedTriangle, Apple};
     }
 
-    public static ShapeType FromKey(string key)
+    public static NotShapeType FromKey(string key)
     {
       return FromString(key, List());
     }
 
-    public static ShapeType FromValue(int id)
+    public static NotShapeType FromValue(int id)
     {
       return FromValue(id, List());
     }
@@ -97,13 +97,13 @@ namespace CommonLibraries.CommonTypes
       return IsValid(id, List());
     }
 
-    public static implicit operator ShapeType(int x)
+    public static implicit operator NotShapeType(int x)
     {
       return List().FirstOrDefault(item => item.Id == x) ??
-             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(ShapeType)}");
+             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(NotShapeType)}");
     }
 
-    public static explicit operator int(ShapeType shapeType)
+    public static explicit operator int(NotShapeType shapeType)
     {
       return shapeType.Id;
     }
