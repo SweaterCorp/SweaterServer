@@ -4,13 +4,13 @@ using System.Linq;
 using CommonLibraries.Infrastructures;
 using CommonLibraries.Localization;
 
-namespace CommonLibraries.CommonTypes
+namespace CommonLibraries.Old
 {
-  public class ColorType : Enumeration
+  public class NotColorType : Enumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 
-    public static ColorType None { get; } = new ColorType(0, "None", "000000")
+    public static NotColorType None { get; } = new NotColorType(0, "None", "000000")
     {
       _translationNames = new List<TranslationName>
       {
@@ -22,7 +22,7 @@ namespace CommonLibraries.CommonTypes
 
     // ------------
 
-    public static ColorType Black { get; } = new ColorType(1, "Black", "000000")
+    public static NotColorType Black { get; } = new NotColorType(1, "Black", "000000")
     {
       _translationNames = new List<TranslationName>
       {
@@ -32,7 +32,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType White { get; } = new ColorType(2, "White", "ffffff")
+    public static NotColorType White { get; } = new NotColorType(2, "White", "ffffff")
     {
       _translationNames = new List<TranslationName>
       {
@@ -44,7 +44,7 @@ namespace CommonLibraries.CommonTypes
 
     // -----------
 
-    public static ColorType Red { get; } = new ColorType(3, "Red", "ff0000")
+    public static NotColorType Red { get; } = new NotColorType(3, "Red", "ff0000")
     {
       _translationNames = new List<TranslationName>
       {
@@ -54,7 +54,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Pink { get; } = new ColorType(4, "Pink", "ffffff")
+    public static NotColorType Pink { get; } = new NotColorType(4, "Pink", "ffffff")
     {
       _translationNames = new List<TranslationName>
       {
@@ -64,7 +64,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Orange { get; } = new ColorType(5, "Orange", "ffa500")
+    public static NotColorType Orange { get; } = new NotColorType(5, "Orange", "ffa500")
     {
       _translationNames = new List<TranslationName>
       {
@@ -74,7 +74,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Yellow { get; } = new ColorType(6, "Yellow", "ffff00")
+    public static NotColorType Yellow { get; } = new NotColorType(6, "Yellow", "ffff00")
     {
       _translationNames = new List<TranslationName>
       {
@@ -84,7 +84,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Green { get; } = new ColorType(7, "Green", "008000")
+    public static NotColorType Green { get; } = new NotColorType(7, "Green", "008000")
     {
       _translationNames = new List<TranslationName>
       {
@@ -94,7 +94,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Blue { get; } = new ColorType(8, "Blue", "42aaff")
+    public static NotColorType Blue { get; } = new NotColorType(8, "Blue", "42aaff")
     {
       _translationNames = new List<TranslationName>
       {
@@ -104,7 +104,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Purple { get; } = new ColorType(9, "Purple", "800080")
+    public static NotColorType Purple { get; } = new NotColorType(9, "Purple", "800080")
     {
       _translationNames = new List<TranslationName>
       {
@@ -114,7 +114,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Brown { get; } = new ColorType(10, "Brown", "964b00")
+    public static NotColorType Brown { get; } = new NotColorType(10, "Brown", "964b00")
     {
       _translationNames = new List<TranslationName>
       {
@@ -124,7 +124,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Beige { get; } = new ColorType(11, "Beige", "f5f5dc")
+    public static NotColorType Beige { get; } = new NotColorType(11, "Beige", "f5f5dc")
     {
       _translationNames = new List<TranslationName>
       {
@@ -134,7 +134,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static ColorType Gray { get; } = new ColorType(12, "Gray", "808080")
+    public static NotColorType Gray { get; } = new NotColorType(12, "Gray", "808080")
     {
       _translationNames = new List<TranslationName>
       {
@@ -149,19 +149,19 @@ namespace CommonLibraries.CommonTypes
     public string this[LaguageType laguageType] => _translationNames.FirstOrDefault(x => x.LaguageType == laguageType)
                                                      ?.Name ?? _translationNames[0].Name;
 
-    private ColorType(int id, string name, RGB rgb) : base(id, name)
+    private NotColorType(int id, string name, RGB rgb) : base(id, name)
     {
       ServerColor = new ServerColor(rgb);
     }
 
-    private ColorType(int id, string name, string hex) : base(id, name)
+    private NotColorType(int id, string name, string hex) : base(id, name)
     {
       ServerColor = new ServerColor(hex);
     }
 
-    public static IEnumerable<ColorType> List()
+    public static IEnumerable<NotColorType> List()
     {
-      return new List<ColorType>
+      return new List<NotColorType>
       {
         None,
         White,
@@ -179,12 +179,12 @@ namespace CommonLibraries.CommonTypes
       };
     }
 
-    public static ColorType FromKey(string key)
+    public static NotColorType FromKey(string key)
     {
       return FromString(key, List());
     }
 
-    public static ColorType FromValue(int id)
+    public static NotColorType FromValue(int id)
     {
       return FromValue(id, List());
     }
@@ -194,13 +194,13 @@ namespace CommonLibraries.CommonTypes
       return IsValid(id, List());
     }
 
-    public static implicit operator ColorType(int x)
+    public static implicit operator NotColorType(int x)
     {
       return List().FirstOrDefault(item => item.Id == x) ??
-             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(ColorType)}");
+             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(NotColorType)}");
     }
 
-    public static explicit operator int(ColorType serverColor)
+    public static explicit operator int(NotColorType serverColor)
     {
       return serverColor.Id;
     }
