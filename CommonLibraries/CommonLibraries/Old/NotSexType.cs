@@ -4,13 +4,13 @@ using System.Linq;
 using CommonLibraries.Infrastructures;
 using CommonLibraries.Localization;
 
-namespace CommonLibraries.CommonTypes
+namespace CommonLibraries.Old
 {
-  public class SexType : Enumeration
+  public class NotSexType : Enumeration
   {
     private List<TranslationName> _translationNames = new List<TranslationName>();
 
-    public static SexType None { get; } = new SexType(0, "None")
+    public static NotSexType None { get; } = new NotSexType(0, "None")
     {
       _translationNames = new List<TranslationName>
       {
@@ -20,7 +20,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static SexType Male { get; } = new SexType(1, "Male")
+    public static NotSexType Male { get; } = new NotSexType(1, "Male")
     {
       _translationNames = new List<TranslationName>
       {
@@ -30,7 +30,7 @@ namespace CommonLibraries.CommonTypes
       }
     };
 
-    public static SexType Female { get; } = new SexType(2, "Female")
+    public static NotSexType Female { get; } = new NotSexType(2, "Female")
     {
       _translationNames = new List<TranslationName>
       {
@@ -43,21 +43,21 @@ namespace CommonLibraries.CommonTypes
     public string this[LaguageType laguageType] => _translationNames.FirstOrDefault(x => x.LaguageType == laguageType)
                                                      ?.Name ?? _translationNames[0].Name;
 
-    private SexType(int id, string name) : base(id, name)
+    private NotSexType(int id, string name) : base(id, name)
     {
     }
 
-    public static IEnumerable<SexType> List()
+    public static IEnumerable<NotSexType> List()
     {
-      return new List<SexType> {None, Male, Female};
+      return new List<NotSexType> {None, Male, Female};
     }
 
-    public static SexType FromKey(string key)
+    public static NotSexType FromKey(string key)
     {
       return FromString(key, List());
     }
 
-    public static SexType FromValue(int id)
+    public static NotSexType FromValue(int id)
     {
       return FromValue(id, List());
     }
@@ -67,13 +67,13 @@ namespace CommonLibraries.CommonTypes
       return IsValid(id, List());
     }
 
-    public static implicit operator SexType(int x)
+    public static implicit operator NotSexType(int x)
     {
       return List().FirstOrDefault(item => item.Id == x) ??
-             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(SexType)}");
+             throw new InvalidCastException($"Cannot cast int x:{x} to enumeration {nameof(NotSexType)}");
     }
 
-    public static explicit operator int(SexType sexType)
+    public static explicit operator int(NotSexType sexType)
     {
       return sexType.Id;
     }
