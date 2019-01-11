@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZebraMain", "ZebraMain\ZebraMain.csproj", "{FD4FA969-9792-4681-8670-921502783331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweaterMain", "ZebraMain\SweaterMain.csproj", "{FD4FA969-9792-4681-8670-921502783331}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLibraries", "..\CommonLibraries\CommonLibraries\CommonLibraries.csproj", "{A27DE594-E7D0-4F46-ACFB-3F10F23C6CA2}"
 EndProject
