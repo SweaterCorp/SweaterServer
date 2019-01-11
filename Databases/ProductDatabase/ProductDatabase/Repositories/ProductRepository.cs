@@ -28,29 +28,29 @@ namespace ProductDatabase.Repositories
     }
     public  List<int> GetCategoryColors(int categoryId)
     {
-      return   Db.ProductEntities.Where(x=>x.CategoryId == categoryId).Select(x=>x.ColorId).Distinct().ToListAsync();
+      return   Db.ProductEntities.Where(x=>x.CategoryId == categoryId).Select(x=>x.ColorId).Distinct().ToList();
 
     }
 
     public List<BrandEntity> GetCategoryBrands(int categoryId)
     {
-      return _db.BrandEntities.FromSql(
+      return Db.BrandEntities.FromSql(
         $"SELECT * FROM [dbo].[ufnGetCategoryBrands]({categoryId})").ToList();
 
     }
 
     public void IncrementClickCategory(int categoryId)
     {
-      var category = _db.CategoryEntities.First(x => x.CategoryId == categoryId);
+      var category = Db.CategoryEntities.First(x => x.CategoryId == categoryId);
       category.ClicksCount++;
-      _db.SaveChanges();
+      Db.SaveChanges();
     }
 
     public void IncrementClickProduct(int productId)
     {
-      var product = _db.ProductEntities.First(x => x.ProductId == productId);
+      var product = Db.ProductEntities.First(x => x.ProductId == productId);
       product.ClicksCount++;
-      _db.SaveChanges();
+      Db.SaveChanges();
     }
 
     // TODO
@@ -62,20 +62,20 @@ namespace ProductDatabase.Repositories
 
       if (filter.BrandsIds.Any())
       {
-        products = _db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice &&
+        products = Db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice &&
                                                   x.Price <= filter.MaximalPrice &&
                                                   filter.BrandsIds.Contains(x.BrandId));
       }
       else
       {
-        products = _db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice &&
+        products = Db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice &&
                                                   x.Price <= filter.MaximalPrice);
       }
 
 
 
       var resultQuery = (from product in products
-                                     join brand in _db.BrandEntities on product.BrandId equals brand.BrandId
+                                     join brand in Db.BrandEntities on product.BrandId equals brand.BrandId
                                      select new ProductCardDto { Product = product, Brand = brand });
       allCounts = resultQuery.Count();
       var result = resultQuery.Skip(offset).Take(count).ToList();
@@ -106,42 +106,37 @@ namespace ProductDatabase.Repositories
 
         foreach (var productCardDto in result)
         {
-          productCardDto.Colors = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Colors
-                                    .Where(x => filter.ColorsIds.Contains(x.ColorTypeId)).ToList() ??
-                                  new List<ColorTypeEntity>();
+          productCardDto.Color = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId && filter.ColorsIds.Contains(x.ColorId))?.ColorId ?? 0;
         }
       }
       else
       {
         foreach (var productCardDto in result)
         {
-          productCardDto.Colors = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.Colors.ToList() ??
-                                  new List<ColorTypeEntity>();
+          productCardDto.Color = colors.FirstOrDefault(x => x.ProductId == productCardDto.Product.ProductId)?.ColorId ?? 0;
         }
       }
 
-      return (allCounts, result.Where(x => x.Sizes.Any() && x.Colors.Any() && x.Brand != null && x.Product != null).ToList());
+      return (allCounts, result.Where(x => x.Sizes.Any() && x.Color != 0 && x.Brand != null && x.Product != null).ToList());
     }
 
 
     private List<ProductSize> GetProductsSizes(ICollection<int> productsIds)
     {
-      return _db.ProductSizeTypeEntities.Where(productSize => productsIds.Contains(productSize.ProductId)).GroupJoin(
-        _db.SizeTypeEntities, productSize => productSize.SizeTypeId, size => size.SizeTypeId,
+      return Db.ProductSizeTypeEntities.Where(productSize => productsIds.Contains(productSize.ProductId)).GroupJoin(
+        Db.SizeTypeEntities, productSize => productSize.SizeTypeId, size => size.SizeTypeId,
         (productSize, sizes) => new ProductSize { ProductId = productSize.ProductId, Sizes = sizes.Select(x => x) }).ToList();
     }
 
-    private List<ProductColors> GetProductsColors(ICollection<int> productsIds)
+    private List<ProductColor> GetProductsColors(ICollection<int> productsIds)
     {
-      return _db.ProductColorTypeEntities.Where(productColor => productsIds.Contains(productColor.ProductId)).GroupJoin(
-        _db.ColorTypeEntities, productColor => productColor.ColorTypeId, color => color.ColorTypeId,
-        (productSize, colors) => new ProductColors { ProductId = productSize.ProductId, Colors = colors.Select(x => x) }).ToList();
+      return Db.ProductEntities.Where(productColor => productsIds.Contains(productColor.ProductId)).Select(x=> new ProductColor{ ProductId = x.ProductId, ColorId = x.ColorId}).ToList();
     }
 
-    private class ProductColors
+    private class ProductColor
     {
       public int ProductId { get; set; }
-      public IEnumerable<ColorTypeEntity> Colors { get; set; }
+      public int ColorId { get; set; }
     }
 
     private class ProductSize
