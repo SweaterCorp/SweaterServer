@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using CommonLibraries.CommonTypes;
 using CommonLibraries.Extensions;
+using CommonLibraries.Infrastructures;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -48,7 +50,7 @@ namespace ZebraMain.Infrastructure
       return new ServerUrl(originalfileName);
     }
 
-    private string AddSizeTypeToPhotoPath(string photoPath, PhotoSizeType photoSizeType)
+    private static string AddSizeTypeToPhotoPath(string photoPath, PhotoSizeType photoSizeType)
     {
       var ext = Path.GetExtension(photoPath);
       var name = Path.GetFileNameWithoutExtension(photoPath);
@@ -69,7 +71,7 @@ namespace ZebraMain.Infrastructure
 
     
 
-    private string CreateUniqueName(string imageName)
+    private static string CreateUniqueName(string imageName)
     {
       var ext = Path.GetExtension(imageName);
       if (ext.IsNullOrEmpty()) ext = imageName.ToLower().Contains(".png") ? ".png" : ".jpg";
