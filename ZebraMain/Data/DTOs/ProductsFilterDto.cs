@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ZebraData
+namespace ZebraData.DTOs
 {
   public class ProductsFilterDto
   {

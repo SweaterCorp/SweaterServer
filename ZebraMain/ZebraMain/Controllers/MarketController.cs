@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ZebraData;
+using ZebraData.DTOs;
 using ZebraData.Entities.ProductGroup;
 using ZebraData.Repositories;
 using ZebraMain.ViewModels;

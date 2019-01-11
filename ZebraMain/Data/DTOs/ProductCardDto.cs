@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ZebraData.Entities.ProductGroup;
 
-namespace ZebraData
+namespace ZebraData.DTOs
 {
   public class ProductCardDto
   {

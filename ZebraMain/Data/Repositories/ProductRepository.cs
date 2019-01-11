@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using ZebraData.DTOs;
 using ZebraData.Entities.ProductGroup;
 
 namespace ZebraData.Repositories

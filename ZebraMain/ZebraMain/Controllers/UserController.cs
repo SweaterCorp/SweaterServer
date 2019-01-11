@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net;
+using CommonLibraries.Infrastructures;
 using CommonLibraries.Response;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
