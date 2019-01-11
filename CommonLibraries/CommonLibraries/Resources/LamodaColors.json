@@ -1,0 +1,109 @@
+﻿{
+  "Colors": [
+    {
+      "LamodaColorType": 1,
+      "Name": "Beige",
+      "HexColors": [ "dfbd93", "ebd7be" ]
+    },
+    {
+      "LamodaColorType": 2,
+      "Name": "Black",
+      "HexColors": [ "000000" ]
+    },
+    {
+      "LamodaColorType": 3,
+      "Name": "Blue",
+      "HexColors": [ "3972fc", "88aafd" ]
+    },
+    {
+      "LamodaColorType": 4,
+      "Name": "Brown",
+      "HexColors": [ "743d02", "9d774e" ]
+    },
+    {
+      "LamodaColorType": 5,
+      "Name": "Burgundy",
+      "HexColors": [ "90011b", "bc6676" ]
+    },
+    {
+      "LamodaColorType": 6,
+      "Name": "Coral",
+      "HexColors": [ "ff616f", "ffa0a8" ]
+    },
+    {
+      "LamodaColorType": 7,
+      "Name": "Cyan",
+      "HexColors": [ "8bcdff", "b9e1ff" ]
+    },
+    {
+      "LamodaColorType": 8,
+      "Name": "Gold",
+      "HexColors": [ "ffe98c", "c39015", "d0a42f" ]
+    },
+    {
+      "LamodaColorType": 9,
+      "Name": "Gray",
+      "HexColors": [ "b6b6b6", "d3d3d3" ]
+    },
+    {
+      "LamodaColorType": 10,
+      "Name": "Green",
+      "HexColors": [ "3db800", "8ad466" ]
+    },
+    {
+      "LamodaColorType": 11,
+      "Name": "Khaki",
+      "HexColors": [ "8d954a", "abb07a" ]
+    },
+    {
+      "LamodaColorType": 12,
+      "Name": "Multicolor",
+      "HexColors": [ "3023ae", "53a0fd", "17c43f", "fffd00", "ff0000", "ff00fd" ]
+    },
+    {
+      "LamodaColorType": 13,
+      "Name": "Orange",
+      "HexColors": [ "ff7a00", "ffa24d" ]
+    },
+    {
+      "LamodaColorType": 14,
+      "Name": "Pink",
+      "HexColors": [ "ff9bd5", "ffc3e5" ]
+    },
+    {
+      "LamodaColorType": 15,
+      "Name": "Purple",
+      "HexColors": [ "6a2ce9", "a580f1" ]
+    },
+    {
+      "LamodaColorType": 16,
+      "Name": "Red",
+      "HexColors": [ "e50000", "ef6666" ]
+    },
+    {
+      "LamodaColorType": 17,
+      "Name": "Silver",
+      "HexColors": [ "9c9c98", "b6b7b1" ]
+    },
+    {
+      "LamodaColorType": 18,
+      "Name": "Transparent",
+      "HexColors": [ "ffffff" ]
+    },
+    {
+      "LamodaColorType": 19,
+      "Name": "Turquoise",
+      "HexColors": [ "4de5de", "99f0ec" ]
+    },
+    {
+      "LamodaColorType": 20,
+      "Name": "White",
+      "HexColors": [ "ffffff" ]
+    },
+    {
+      "LamodaColorType": 21,
+      "Name": "Yellow",
+      "HexColors": [ "ffec1c", "fff9bb" ]
+    }
+  ]
+}
