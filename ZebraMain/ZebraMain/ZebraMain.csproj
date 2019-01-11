@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CommonLibraries\CommonLibraries\CommonLibraries.csproj" />
-    <ProjectReference Include="..\Data\ZebraData.csproj" />
   </ItemGroup>
 
   <ItemGroup>
