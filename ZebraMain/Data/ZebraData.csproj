@@ -15,10 +15,4 @@
     <ProjectReference Include="..\..\CommonLibraries\CommonLibraries\CommonLibraries.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\AccountGroup\" />
-    <Folder Include="Entities\AreaGroup\" />
-    <Folder Include="Localization\" />
-  </ItemGroup>
-
 </Project>
