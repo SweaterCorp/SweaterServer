@@ -1,4 +1,5 @@
 ﻿using CommonLibraries.Localization;
+using CommonLibraries.Old;
 using ZebraData.Entities.UserGroup;
 
 namespace ZebraMain.ViewModels
@@ -19,9 +20,9 @@ namespace ZebraMain.ViewModels
 
     public static UserViewModel CreateFromUserEntity(UserEntity user)
     {
-      var humanColorType = CommonLibraries.CommonTypes.HumanColorType.FromValue(user.HumanColorType);
-      var shapeType = CommonLibraries.CommonTypes.ShapeType.FromValue(user.ShapeType);
-      var sexType = CommonLibraries.CommonTypes.SexType.FromValue(user.SexType);
+      var humanColorType = NotHumanColorType.FromValue(user.HumanColorType);
+      var shapeType = NotShapeType.FromValue(user.ShapeType);
+      var sexType = NotSexType.FromValue(user.SexType);
 
       return new UserViewModel
       {

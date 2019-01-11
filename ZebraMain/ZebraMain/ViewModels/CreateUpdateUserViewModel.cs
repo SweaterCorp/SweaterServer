@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using CommonLibraries.Old;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ZebraMain.ViewModels
 {
@@ -48,11 +49,11 @@ namespace ZebraMain.ViewModels
 
     public void Validate(ModelStateDictionary modelState)
     {
-      if (HumanColorType.HasValue && !CommonLibraries.CommonTypes.HumanColorType.IsValid(HumanColorType.Value))
+      if (HumanColorType.HasValue && !NotHumanColorType.IsValid(HumanColorType.Value))
         modelState.AddModelError("HumanColorType", $"There is no human color type with id:{HumanColorType.Value}");
-      if (ShapeType.HasValue && !CommonLibraries.CommonTypes.ShapeType.IsValid(ShapeType.Value))
+      if (ShapeType.HasValue && !NotShapeType.IsValid(ShapeType.Value))
         modelState.AddModelError("ShapeType", $"There is no shape type with id:{ShapeType.Value}");
-      if (SexType.HasValue && !CommonLibraries.CommonTypes.SexType.IsValid(SexType.Value))
+      if (SexType.HasValue && !NotSexType.IsValid(SexType.Value))
         modelState.AddModelError("SexType", $"There is no sex type with id:{SexType.Value}");
     }
   }
