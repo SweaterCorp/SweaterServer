@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 
-namespace ZebraMain
+namespace SweaterMain
 {
   public class Program
   {

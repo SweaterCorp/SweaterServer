@@ -1,7 +1,7 @@
 ﻿using CommonLibraries.Old;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ZebraMain.ViewModels
+namespace SweaterMain.ViewModels
 {
   public class CreateUpdateUserViewModel
   {

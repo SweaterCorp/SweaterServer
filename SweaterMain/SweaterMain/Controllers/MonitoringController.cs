@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ZebraData.Repositories;
+using SweaterData.Repositories;
 
-namespace ZebraMain.Controllers
+namespace SweaterMain.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]

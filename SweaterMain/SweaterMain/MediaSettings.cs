@@ -1,4 +1,4 @@
-﻿namespace ZebraMain
+﻿namespace SweaterMain
 {
   public class MediaSettings
   {

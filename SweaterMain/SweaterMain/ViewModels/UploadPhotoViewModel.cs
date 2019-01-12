@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace ZebraMain.ViewModels
+namespace SweaterMain.ViewModels
 {
   public class UploadPhotoViewModel
   {

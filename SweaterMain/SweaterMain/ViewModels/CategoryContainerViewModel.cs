@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ZebraData.Entities.ProductGroup;
+using SweaterData.Entities.ProductGroup;
 
-namespace ZebraMain.ViewModels
+namespace SweaterMain.ViewModels
 {
   public class CategoryContainerViewModel<T>
   {

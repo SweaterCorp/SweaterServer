@@ -2,7 +2,7 @@
 {
   public class ConnectionStrings
   {
-    public string ZebraConnection { get; set; }
-    public string ZebraAccountConnection { get; set; }
+    public string SweaterConnection { get; set; }
+    public string SweaterAccountConnection { get; set; }
   }
 }

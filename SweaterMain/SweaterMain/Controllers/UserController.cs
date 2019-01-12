@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ZebraData.Entities.UserGroup;
-using ZebraData.Repositories;
-using ZebraMain.Infrastructure;
-using ZebraMain.ViewModels;
+using SweaterData.Entities.UserGroup;
+using SweaterData.Repositories;
+using SweaterMain.Infrastructure;
+using SweaterMain.ViewModels;
 
-namespace ZebraMain.Controllers
+namespace SweaterMain.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]
@@ -21,7 +21,7 @@ namespace ZebraMain.Controllers
   [ApiController]
   public class UserController : ControllerBase
   {
-    private const string Host = "http://Zebra.com/";
+    private const string Host = "http://Sweater.com/";
 
     private UserRepository Db { get; }
     private MediaService MediaService { get; }

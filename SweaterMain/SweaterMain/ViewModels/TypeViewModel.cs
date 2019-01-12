@@ -1,4 +1,4 @@
-﻿namespace ZebraMain.ViewModels
+﻿namespace SweaterMain.ViewModels
 {
   public class TypeViewModel
   {

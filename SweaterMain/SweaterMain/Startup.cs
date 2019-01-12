@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ZebraData;
-using ZebraData.Repositories;
-using ZebraMain.Infrastructure;
+using SweaterData;
+using SweaterData.Repositories;
+using SweaterMain.Infrastructure;
 
-namespace ZebraMain
+namespace SweaterMain
 {
   public class Startup
   {
@@ -31,8 +31,8 @@ namespace ZebraMain
       {
         options.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
       });
-      services.AddDbContext<ZebraMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZebraMainConnection")));
-      //services.Configure<ConnectionStrings>(options => options.ZebraConnection = Configuration.GetConnectionString("ZebraMainConnection"));
+      services.AddDbContext<SweaterMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SweaterMainConnection")));
+      //services.Configure<ConnectionStrings>(options => options.SweaterConnection = Configuration.GetConnectionString("SweaterMainConnection"));
       services.AddTransient<ProductRepository>();
       services.AddTransient<UserRepository>();
       services.AddTransient<MediaService>();

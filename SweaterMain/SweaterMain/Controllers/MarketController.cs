@@ -5,13 +5,13 @@ using CommonLibraries.Response;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ZebraData;
-using ZebraData.DTOs;
-using ZebraData.Entities.ProductGroup;
-using ZebraData.Repositories;
-using ZebraMain.ViewModels;
+using SweaterData;
+using SweaterData.DTOs;
+using SweaterData.Entities.ProductGroup;
+using SweaterData.Repositories;
+using SweaterMain.ViewModels;
 
-namespace ZebraMain.Controllers
+namespace SweaterMain.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]

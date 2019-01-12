@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommonLibraries.Infrastructures;
 
-namespace ZebraMain.Infrastructure
+namespace SweaterMain.Infrastructure
 {
   //public class TypeAttribute<T> : ValidationAttribute
   //{

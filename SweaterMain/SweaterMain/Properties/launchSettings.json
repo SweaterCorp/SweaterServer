@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ZebraMain": {
+    "SweaterMain": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

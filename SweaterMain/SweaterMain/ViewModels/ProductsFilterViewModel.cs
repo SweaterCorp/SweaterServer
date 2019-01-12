@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ZebraMain.ViewModels
+namespace SweaterMain.ViewModels
 {
   public class ProductsFilterViewModel
   {

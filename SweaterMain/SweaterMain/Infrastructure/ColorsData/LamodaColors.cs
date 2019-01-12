@@ -2,7 +2,7 @@
 using CommonLibraries.CommonTypes;
 using CommonLibraries.Infrastructures;
 
-namespace ZebraMain.Infrastructure.ColorsData
+namespace SweaterMain.Infrastructure.ColorsData
 {
   public class LamodaColors
   {

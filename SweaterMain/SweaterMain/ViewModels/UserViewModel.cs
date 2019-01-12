@@ -1,8 +1,8 @@
 ﻿using CommonLibraries.Localization;
 using CommonLibraries.Old;
-using ZebraData.Entities.UserGroup;
+using SweaterData.Entities.UserGroup;
 
-namespace ZebraMain.ViewModels
+namespace SweaterMain.ViewModels
 {
   public class UserViewModel
   {

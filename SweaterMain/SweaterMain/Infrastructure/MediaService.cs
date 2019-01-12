@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace ZebraMain.Infrastructure
+namespace SweaterMain.Infrastructure
 {
   public class MediaService
   {
