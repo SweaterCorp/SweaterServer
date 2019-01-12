@@ -18,7 +18,16 @@ namespace ProductDatabase.Repositories
     }
 
    
-   
+    public async Task<CountryEntity> GetOrCreateCountryAsync(string countryName)
+    {
+      var countryDb = await Db.CountryEntities.FirstOrDefaultAsync(x => x.RussianName == countryName);
+      if (countryDb != null) return countryDb;
+
+      countryDb = new CountryEntity {RussianName = countryName};
+      Db.CountryEntities.Add(countryDb);
+      await Db.SaveChangesAsync();
+      return countryDb;
+    }
 
     public async Task<CategoryEntity> GetOrCreateCategoryAsync(int categoryTypeId)
     {
