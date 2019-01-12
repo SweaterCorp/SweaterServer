@@ -20,7 +20,16 @@ namespace ProductDatabase.Repositories
    
    
 
-   
+    public async Task<CategoryEntity> GetOrCreateCategoryAsync(int categoryTypeId)
+    {
+      var categoryDb = await Db.CategoryEntities.FirstOrDefaultAsync(x => x.CategoryTypeId == categoryTypeId);
+      if (categoryDb != null) return categoryDb;
+
+      categoryDb = new CategoryEntity {CategoryTypeId = categoryTypeId};
+      Db.CategoryEntities.Add(categoryDb);
+      await Db.SaveChangesAsync();
+      return categoryDb;
+    }
 
     public async Task<BrandEntity> GetOrCreateBrandAsync(string brandName)
     {
