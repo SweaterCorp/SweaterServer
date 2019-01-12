@@ -17,6 +17,33 @@ namespace ProductDatabase.Repositories
       Db = db;
     }
 
+   
+   
+
+   
+
+   
+
+    
+
+    public async Task<List<ProductSizeTypeEntity>> AddProductSizes(int productId, List<SizeDto> sizeDtos)
+    {
+      var currentSizes = new List<(bool isAvailable, SizeTypeEntity size)>();
+      foreach (var sizeDto in sizeDtos) currentSizes.Add((sizeDto.IsAvailable, await GetOrCreateSizeAsync(sizeDto)));
+
+      var productSizes = currentSizes.Select(sizeTypeEntity => new ProductSizeTypeEntity
+      {
+        IsAvailable = sizeTypeEntity.isAvailable,
+        ProductId = productId,
+        SizeTypeId = sizeTypeEntity.size.SizeTypeId,
+        UpdatedDate = DateTime.UtcNow
+      }).ToList();
+
+      Db.ProductSizeTypeEntities.AddRange(productSizes);
+      await Db.SaveChangesAsync();
+      return productSizes;
+    }
+
     public async Task<SizeTypeEntity> GetOrCreateSizeAsync(SizeDto sizeDto)
     {
       var sizeDb =
