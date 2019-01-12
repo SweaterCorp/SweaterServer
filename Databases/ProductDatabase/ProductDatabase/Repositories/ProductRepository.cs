@@ -17,7 +17,41 @@ namespace ProductDatabase.Repositories
       Db = db;
     }
 
-   
+    public async Task<ProductEntity> AddProduct(AddProductDto productDto)
+    {
+      var country = await GetOrCreateCountryAsync(productDto.Country);
+      var brand = await GetOrCreateBrandAsync(productDto.BrandName);
+      var category = await GetOrCreateCategoryAsync(productDto.CategoryTypeId);
+
+      var product = new ProductEntity
+      {
+        BrandId = brand.BrandId,
+        CategoryId = category.CategoryId,
+        ClicksCount = 0,
+        ColorId = productDto.ColorId,
+        CreatedDate = DateTime.UtcNow,
+        Description = "",
+        IsAvailable = true,
+        IsDeleted = false,
+        Link = productDto.Link,
+        MadeInCountryId = country.CountryId,
+        PreviewPhotoId = 0,
+        Price = productDto.Price,
+        PrintTypeId = productDto.PrintTypeId,
+        VendorCode = productDto.VendorCode
+      };
+      Db.ProductEntities.Add(product);
+      await Db.SaveChangesAsync();
+
+      var photos = await AddProductPhotos(product.ProductId, productDto.Photos);
+
+      product.PreviewPhotoId = photos.FirstOrDefault()?.ProductId ?? 0;
+      await Db.SaveChangesAsync();
+
+      await AddProductSizes(product.ProductId, productDto.Sizes);
+      return product;
+    }
+
     public async Task<CountryEntity> GetOrCreateCountryAsync(string countryName)
     {
       var countryDb = await Db.CountryEntities.FirstOrDefaultAsync(x => x.RussianName == countryName);
@@ -50,6 +84,19 @@ namespace ProductDatabase.Repositories
       await Db.SaveChangesAsync();
       return brandDb;
     }
+
+    //public async Task<ProductPhotoEntity> AddProductPhoto(int productId, string photoUrl)
+    //{
+    //  var product = await Db.ProductEntities.FirstOrDefaultAsync(x => x.ProductId == productId);
+    //  if (product == null) throw new System.Exception("product is null");
+
+    //  var photo = new ProductPhotoEntity {ProductId = productId, CreatedDate = DateTime.UtcNow, PhotoUrl = photoUrl};
+    //  Db.ProductPhotoEntities.Add(photo);
+    //  await Db.SaveChangesAsync();
+    //  product.PreviewPhotoId = photo.ProductPhotoId;
+    //  await Db.SaveChangesAsync();
+    //  return photo;
+    //}
 
     public async Task<List<ProductPhotoEntity>> AddProductPhotos(int productId, List<string> photoUrls)
     {
