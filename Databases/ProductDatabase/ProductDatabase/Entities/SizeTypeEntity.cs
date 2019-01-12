@@ -9,8 +9,8 @@ namespace ProductDatabase.Entities
     [Key]
     public int SizeTypeId { get; set; }
 
-    public string Russian { get; set; }
-    public string OtherCountrySize { get; set; }
+    public string RussianSize { get; set; }
+    public string OtherSize { get; set; }
     public string CountryCode { get; set; }
   }
 }
