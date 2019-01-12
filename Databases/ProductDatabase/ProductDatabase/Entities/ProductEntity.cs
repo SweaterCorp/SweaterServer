@@ -21,7 +21,7 @@ namespace ProductDatabase.Entities
     public string Description { get; set; }
     public int MadeInCountryId { get; set; }
     public string Link { get; set; }
-    public string PreviewPhotoUrl { get; set; }
+    public int PreviewPhotoId { get; set; }
     public DateTime CreatedDate { get; set; }
     public bool IsDeleted { get; set; }
   }
