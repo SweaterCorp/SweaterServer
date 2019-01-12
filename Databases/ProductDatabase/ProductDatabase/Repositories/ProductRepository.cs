@@ -24,7 +24,15 @@ namespace ProductDatabase.Repositories
 
    
 
-    
+    public async Task<List<ProductPhotoEntity>> AddProductPhotos(int productId, List<string> photoUrls)
+    {
+      var photos = photoUrls
+        .Select(x => new ProductPhotoEntity {ProductId = productId, CreatedDate = DateTime.UtcNow, PhotoUrl = x})
+        .ToList();
+      Db.ProductPhotoEntities.AddRange(photos);
+      await Db.SaveChangesAsync();
+      return photos;
+    }
 
     public async Task<List<ProductSizeTypeEntity>> AddProductSizes(int productId, List<SizeDto> sizeDtos)
     {
