@@ -8,7 +8,7 @@ namespace ProductDatabase.Entities
   {
     [Key]
     public int CategoryId { get; set; }
-    public int CategoryPhoroUrl { get; set; }
+    public int CategoryTypeId { get; set; }
     public int ClicksCount { get; set; }
     public string CategoryPhotoUrl { get; set; }
   }
