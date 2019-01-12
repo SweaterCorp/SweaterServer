@@ -22,7 +22,16 @@ namespace ProductDatabase.Repositories
 
    
 
-   
+    public async Task<BrandEntity> GetOrCreateBrandAsync(string brandName)
+    {
+      var brandDb = await Db.BrandEntities.FirstOrDefaultAsync(x => x.Name == brandName);
+      if (brandDb != null) return brandDb;
+
+      brandDb = new BrandEntity {Name = brandName};
+      Db.BrandEntities.Add(brandDb);
+      await Db.SaveChangesAsync();
+      return brandDb;
+    }
 
     public async Task<List<ProductPhotoEntity>> AddProductPhotos(int productId, List<string> photoUrls)
     {
