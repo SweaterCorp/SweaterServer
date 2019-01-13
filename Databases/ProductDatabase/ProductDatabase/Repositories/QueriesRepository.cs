@@ -29,8 +29,7 @@ namespace ProductDatabase.Repositories
     }
     public async Task<List<int>> GetCategoryColorsAsync(int categoryId)
     {
-      return  await Db.ProductEntities.Where(x=>x.CategoryId == categoryId).Select(x=>x.ColorId).Distinct().ToListAsync();
-
+      return  await Db.ProductEntities.Where(x=>x.CategoryId == categoryId).Select(x=>x.ShopColorId).Distinct().ToListAsync();
     }
 
     public async Task<List<BrandEntity>> GetCategoryBrandsAsync(int categoryId)
@@ -131,7 +130,7 @@ namespace ProductDatabase.Repositories
 
     private async Task<List<ProductColor>> GetProductsColors(ICollection<int> productsIds)
     {
-      return await Db.ProductEntities.Where(productColor => productsIds.Contains(productColor.ProductId)).Select(x=> new ProductColor{ ProductId = x.ProductId, ColorId = x.ColorId}).ToListAsync();
+      return await Db.ProductEntities.Where(productColor => productsIds.Contains(productColor.ProductId)).Select(x=> new ProductColor{ ProductId = x.ProductId, ColorId = x.ShopColorId}).ToListAsync();
     }
 
     private class ProductColor
