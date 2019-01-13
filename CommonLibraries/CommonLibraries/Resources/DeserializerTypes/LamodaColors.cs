@@ -2,18 +2,18 @@
 
 namespace CommonLibraries.Resources.DeserializerTypes
 {
-  public class DeserializerLamodaColors
+  public class LamodaColorsDeserializer
   {
-    public List<DeserializerColorCollection> Colors { get; set; }
+    public List<ColorCollectionDeserializer> Colors { get; set; }
   }
 
-  public class DeserializerColorCollection
+  public class ColorCollectionDeserializer
   {
-    public DeserializerLamodaColorType LamodaColorType { get; set; }
+    public LamodaColorTypeDeserializer LamodaColorType { get; set; }
     public List<string> HexColors { get; set; }
   }
 
-  public class DeserializerLamodaColorType
+  public class LamodaColorTypeDeserializer
   {
     public int Id { get; set; }
     public string Name { get; set; }
