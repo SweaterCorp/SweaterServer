@@ -48,5 +48,15 @@ namespace CommonLibraries.CommonTypes
     {
       return AsList().Find(x => x.Id == id);
     }
+
+    public static explicit operator PrintType(string name)
+    {
+      return AsList().Find(x => x.Name == name);
+    }
+
+    public static PrintType StringToPrintType(string name, bool isRussian = false)
+    {
+      return isRussian ? AsList().Find(x => x.RussianName.Equals(name, System.StringComparison.OrdinalIgnoreCase)) : (PrintType)name;
+    }
   }
 }
