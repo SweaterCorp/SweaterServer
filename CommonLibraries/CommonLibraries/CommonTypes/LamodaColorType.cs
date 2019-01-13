@@ -16,7 +16,7 @@ namespace CommonLibraries.CommonTypes
     public static LamodaColorType Coral { get; } = new LamodaColorType(6, "Coral ", "Кораловый");
     public static LamodaColorType Cyan { get; } = new LamodaColorType(7, "Cyan ", "Голубой");
     public static LamodaColorType Gold { get; } = new LamodaColorType(8, "Gold", "Зотолой");
-    public static LamodaColorType Gray { get; } = new LamodaColorType(9, "Gray", "Сервый");
+    public static LamodaColorType Gray { get; } = new LamodaColorType(9, "Gray", "Серый");
     public static LamodaColorType Green { get; } = new LamodaColorType(10, "Green", "Зеленый");
     public static LamodaColorType Khaki { get; } = new LamodaColorType(11, "Khaki", "Хаки");
     public static LamodaColorType Multicolor { get; } = new LamodaColorType(12, "Multicolor ", "Мультиколор");
@@ -67,6 +67,16 @@ namespace CommonLibraries.CommonTypes
     public static explicit operator LamodaColorType(int id)
     {
       return AsList().Find(x => x.Id == id);
+    }
+
+    public static explicit operator LamodaColorType(string name)
+    {
+      return AsList().Find(x => x.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+    }
+
+    public static LamodaColorType StringToLamodaColorType(string name, bool isRussian = false)
+    {
+      return isRussian ? AsList().Find(x => x.RussianName.Equals(name, System.StringComparison.OrdinalIgnoreCase)) : (LamodaColorType)name;
     }
   }
 }
