@@ -1,29 +1,18 @@
 ﻿using System.IO;
-using Microsoft.AspNetCore.Hosting;
 
 namespace CommonLibraries.Resources
 {
-  public class Content
+  public class ContentPath
   {
-    private string ContentPath { get; }
-    public string Reources => Path.Combine(ContentPath, "Resources");
+    private string BasePath { get; }
+    public string Reources => Path.Combine(BasePath, "Resources");
 
-    public string ColorsMatching => Path.Combine(ContentPath, "ColorsMatching.json");
-    public string LamodaColors => Path.Combine(ContentPath, "LamodaColors.json");
+    public string ColorsMatching => Path.Combine(Reources, "ColorsMatching.json");
+    public string LamodaColors => Path.Combine(Reources, "LamodaColors.json");
 
-    public Content(string basePath)
+    public ContentPath(string resourceContainigFolder = null)
     {
-      ContentPath = basePath;
-    }
-
-    public Content(IHostingEnvironment env)
-    {
-      ContentPath = env.ContentRootPath;
-    }
-
-    public string GetReourcePath(string resourceName)
-    {
-      return Path.Combine(ContentPath, "Resources", resourceName);
+      BasePath = !string.IsNullOrEmpty(resourceContainigFolder) ? resourceContainigFolder : Directory.GetCurrentDirectory();
     }
   }
 }
