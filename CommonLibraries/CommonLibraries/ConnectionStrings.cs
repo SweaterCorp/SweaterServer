@@ -2,7 +2,7 @@
 {
   public class ConnectionStrings
   {
-    public string SweaterConnection { get; set; }
+    public string SweaterMainConnection { get; set; }
     public string SweaterAccountConnection { get; set; }
   }
 }
