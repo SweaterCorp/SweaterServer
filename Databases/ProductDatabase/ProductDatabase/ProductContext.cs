@@ -29,7 +29,7 @@ namespace ProductDatabase
       //modelBuilder.Entity<UserEntity>().Ignore(x => x.ShapeType.Name);
 
       //modelBuilder.Entity<UserPhotoEntity>().HasKey(x => new { x. });
-      //modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new { x.ProductId, x.SizeTypeId });
+      modelBuilder.Entity<ProductSizeTypeEntity>().HasKey(x => new {x.ProductId, x.SizeTypeId});
       //modelBuilder.Entity<ProductColorTypeEntity>().HasKey(x => new { x.ProductId, x.ColorTypeId });
     }
   }
