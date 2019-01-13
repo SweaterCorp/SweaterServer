@@ -19,6 +19,8 @@ namespace ProductDatabase.Repositories
 
     public async Task<ProductEntity> AddProduct(AddProductDto productDto)
     {
+      if (await Db.ProductEntities.AnyAsync(x => x.VendorCode == productDto.VendorCode)) return null;
+
       var country = await GetOrCreateCountryAsync(productDto.Country);
       var brand = await GetOrCreateBrandAsync(productDto.BrandName);
       var category = await GetOrCreateCategoryAsync(productDto.CategoryTypeId);
@@ -26,9 +28,12 @@ namespace ProductDatabase.Repositories
       var product = new ProductEntity
       {
         BrandId = brand.BrandId,
+        PrintTypeId = productDto.PrintTypeId,
+        ExtraPrintTypeId = productDto.ExtraPrintTypeId,
         CategoryId = category.CategoryId,
         ClicksCount = 0,
-        ColorId = productDto.ColorId,
+        ShopColorId = productDto.ColorId,
+        ShopTypeId = 0,
         CreatedDate = DateTime.UtcNow,
         Description = "",
         IsAvailable = true,
@@ -37,7 +42,6 @@ namespace ProductDatabase.Repositories
         MadeInCountryId = country.CountryId,
         PreviewPhotoId = 0,
         Price = productDto.Price,
-        PrintTypeId = productDto.PrintTypeId,
         VendorCode = productDto.VendorCode
       };
       Db.ProductEntities.Add(product);
@@ -45,41 +49,41 @@ namespace ProductDatabase.Repositories
 
       var photos = await AddProductPhotos(product.ProductId, productDto.Photos);
 
-      product.PreviewPhotoId = photos.FirstOrDefault()?.ProductId ?? 0;
+      product.PreviewPhotoId = photos.FirstOrDefault()?.ProductPhotoId ?? 0;
       await Db.SaveChangesAsync();
 
       await AddProductSizes(product.ProductId, productDto.Sizes);
       return product;
     }
 
-    public async Task<CountryEntity> GetOrCreateCountryAsync(string countryName)
+    private async Task<CountryEntity> GetOrCreateCountryAsync(string countryName)
     {
       var countryDb = await Db.CountryEntities.FirstOrDefaultAsync(x => x.RussianName == countryName);
       if (countryDb != null) return countryDb;
 
-      countryDb = new CountryEntity {RussianName = countryName};
+      countryDb = new CountryEntity {RussianName = countryName, EnglishName = string.Empty, FlagUrl = string.Empty};
       Db.CountryEntities.Add(countryDb);
       await Db.SaveChangesAsync();
       return countryDb;
     }
 
-    public async Task<CategoryEntity> GetOrCreateCategoryAsync(int categoryTypeId)
+    private async Task<CategoryEntity> GetOrCreateCategoryAsync(int categoryTypeId)
     {
       var categoryDb = await Db.CategoryEntities.FirstOrDefaultAsync(x => x.CategoryTypeId == categoryTypeId);
       if (categoryDb != null) return categoryDb;
 
-      categoryDb = new CategoryEntity {CategoryTypeId = categoryTypeId};
+      categoryDb = new CategoryEntity {CategoryTypeId = categoryTypeId, CategoryPhotoUrl = string.Empty};
       Db.CategoryEntities.Add(categoryDb);
       await Db.SaveChangesAsync();
       return categoryDb;
     }
 
-    public async Task<BrandEntity> GetOrCreateBrandAsync(string brandName)
+    private async Task<BrandEntity> GetOrCreateBrandAsync(string brandName)
     {
       var brandDb = await Db.BrandEntities.FirstOrDefaultAsync(x => x.Name == brandName);
       if (brandDb != null) return brandDb;
 
-      brandDb = new BrandEntity {Name = brandName};
+      brandDb = new BrandEntity {Name = brandName, Site = string.Empty, LogoUrl = string.Empty};
       Db.BrandEntities.Add(brandDb);
       await Db.SaveChangesAsync();
       return brandDb;
@@ -98,7 +102,7 @@ namespace ProductDatabase.Repositories
     //  return photo;
     //}
 
-    public async Task<List<ProductPhotoEntity>> AddProductPhotos(int productId, List<string> photoUrls)
+    private async Task<List<ProductPhotoEntity>> AddProductPhotos(int productId, IEnumerable<string> photoUrls)
     {
       var photos = photoUrls
         .Select(x => new ProductPhotoEntity {ProductId = productId, CreatedDate = DateTime.UtcNow, PhotoUrl = x})
@@ -108,10 +112,11 @@ namespace ProductDatabase.Repositories
       return photos;
     }
 
-    public async Task<List<ProductSizeTypeEntity>> AddProductSizes(int productId, List<SizeDto> sizeDtos)
+    private async Task<List<ProductSizeTypeEntity>> AddProductSizes(int productId, IEnumerable<SizeDto> sizeDtos)
     {
       var currentSizes = new List<(bool isAvailable, SizeTypeEntity size)>();
-      foreach (var sizeDto in sizeDtos) currentSizes.Add((sizeDto.IsAvailable, await GetOrCreateSizeAsync(sizeDto)));
+      foreach (var sizeDto in sizeDtos.Distinct(new SizeDto()))
+        currentSizes.Add((sizeDto.IsAvailable, await GetOrCreateSizeAsync(sizeDto)));
 
       var productSizes = currentSizes.Select(sizeTypeEntity => new ProductSizeTypeEntity
       {
@@ -126,18 +131,18 @@ namespace ProductDatabase.Repositories
       return productSizes;
     }
 
-    public async Task<SizeTypeEntity> GetOrCreateSizeAsync(SizeDto sizeDto)
+    private async Task<SizeTypeEntity> GetOrCreateSizeAsync(SizeDto sizeDto)
     {
       var sizeDb =
         await Db.SizeTypeEntities.FirstOrDefaultAsync(x => sizeDto.RussianSize == x.RussianSize &&
-                                                           sizeDto.OtherSize == x.OtherSize &&
+                                                           sizeDto.OtherCountry == x.OtherCountry &&
                                                            sizeDto.CountryCode == x.CountryCode);
       if (sizeDb != null) return sizeDb;
 
       sizeDb = new SizeTypeEntity
       {
         CountryCode = sizeDto.CountryCode,
-        OtherSize = sizeDto.OtherSize,
+        OtherCountry = sizeDto.OtherCountry,
         RussianSize = sizeDto.RussianSize
       };
       Db.SizeTypeEntities.Add(sizeDb);
