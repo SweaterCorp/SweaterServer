@@ -9,13 +9,13 @@ namespace CommonLibraries.Resources.DeserializerTypes
 
   public class ColorCollectionDeserializer
   {
-    public LamodaColorTypeDeserializer LamodaColorType { get; set; }
+    public int LamodaColorType { get; set; }
     public List<string> HexColors { get; set; }
   }
 
   public class LamodaColorTypeDeserializer
   {
     public int Id { get; set; }
-    public string Name { get; set; }
+
   }
 }
