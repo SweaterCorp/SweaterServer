@@ -47,9 +47,9 @@ namespace CommonLibraries.Infrastructures
     public static RGB ToRgb(string hex)
     {
       hex = hex.Replace("#", "");
-      var r = Convert.ToInt16(new string(new[] {hex[0], hex[1]}));
-      var g = Convert.ToInt16(new string(new[] {hex[2], hex[3]}));
-      var b = Convert.ToInt16(new string(new[] {hex[4], hex[5]}));
+      var r = Convert.ToInt16(new string(new[] {hex[0], hex[1]}), 16);
+      var g = Convert.ToInt16(new string(new[] {hex[2], hex[3]}), 16);
+      var b = Convert.ToInt16(new string(new[] {hex[4], hex[5]}), 16);
       return new RGB {R = r, G = g, B = b};
     }
 
