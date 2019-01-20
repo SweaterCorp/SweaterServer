@@ -2,35 +2,35 @@
 
 namespace CommonLibraries.Resources.DeserializerTypes
 {
-  public class DeserializerColorsMatching
+  public class ColorMatchingDeserializer
   {
-    public DeserializerColorsGroups Autumn { get; set; }
-    public DeserializerColorsGroups Spring { get; set; }
-    public DeserializerColorsGroups Summer { get; set; }
-    public DeserializerColorsGroups Winter { get; set; }
+    public ColorGroupsDeserializer Autumn { get; set; }
+    public ColorGroupsDeserializer Spring { get; set; }
+    public ColorGroupsDeserializer Summer { get; set; }
+    public ColorGroupsDeserializer Winter { get; set; }
   }
 
-  public class DeserializerColorsGroups
+  public class ColorGroupsDeserializer
   {
-    public DeserializerColorsGroup RedPink { get; set; }
-    public DeserializerColorsGroup OrangeYellow { get; set; }
-    public DeserializerColorsGroup Green { get; set; }
-    public DeserializerColorsGroup Blue { get; set; }
-    public DeserializerColorsGroup Purple { get; set; }
-    public DeserializerColorsGroup BrownBeige { get; set; }
-    public DeserializerColorsGroup GrayBlackWhite { get; set; }
+    public ColorGroupDeserializer RedPink { get; set; }
+    public ColorGroupDeserializer OrangeYellow { get; set; }
+    public ColorGroupDeserializer Green { get; set; }
+    public ColorGroupDeserializer Blue { get; set; }
+    public ColorGroupDeserializer Purple { get; set; }
+    public ColorGroupDeserializer BrownBeige { get; set; }
+    public ColorGroupDeserializer GrayBlackWhite { get; set; }
   }
 
-  public class DeserializerColorsGroup
+  public class ColorGroupDeserializer
   {
     public int Id { get; set; }
     public string Name { get; set; }
-    public List<DeserializerColorType> BaseColors { get; set; }
+    public List<ColorTypeDeserializer> BaseColors { get; set; }
     public List<string> GoodColors { get; set; }
     public List<string> BadColors { get; set; }
   }
 
-  public class DeserializerColorType
+  public class ColorTypeDeserializer
   {
     public int Id { get; set; }
     public string Name { get; set; }
