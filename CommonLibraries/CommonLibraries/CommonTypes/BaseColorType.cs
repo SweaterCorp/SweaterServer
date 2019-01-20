@@ -11,7 +11,7 @@ namespace CommonLibraries.CommonTypes
     public static BaseColorType Black { get; } = new BaseColorType(1, "Black", "000000");
     public static BaseColorType White { get; } = new BaseColorType(2, "White", "ffffff");
     public static BaseColorType Red { get; } = new BaseColorType(3, "Red", "ff0000");
-    public static BaseColorType Pink { get; } = new BaseColorType(4, "Pink", "ffffff");
+    public static BaseColorType Pink { get; } = new BaseColorType(4, "Pink", "ffc0cb");
     public static BaseColorType Orange { get; } = new BaseColorType(5, "Orange", "ffa500");
     public static BaseColorType Yellow { get; } = new BaseColorType(6, "Yellow", "ffff00");
     public static BaseColorType Green { get; } = new BaseColorType(7, "Green", "008000");
