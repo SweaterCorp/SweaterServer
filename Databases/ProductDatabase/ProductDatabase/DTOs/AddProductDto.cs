@@ -9,12 +9,14 @@ namespace ProductDatabase.DTOs
     public int CategoryTypeId { get; set; }
     public int PrintTypeId { get; set; }
     public int ExtraPrintTypeId { get; set; }
-    public int ColorId { get; set; }
+    public int ShopColorId { get; set; }
+    public int ShopTypeId { get; set; }
     public decimal Price { get; set; }
     public string Country { get; set; }
     public string Link { get; set; }
     public List<SizeDto> Sizes { get; set; }
     public List<string> Photos { get; set; }
+    public List<int> ColorIds { get; set; }
   }
 
   public class SizeDto : IEqualityComparer<SizeDto>
