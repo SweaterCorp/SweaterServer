@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using ProductDatabase.Entities;
 
 namespace ProductDatabase.DTOs
@@ -8,6 +9,6 @@ namespace ProductDatabase.DTOs
     public BrandEntity Brand { get; set; }
     public ProductEntity Product { get; set; }
     public List<SizeTypeEntity> Sizes { get; set; }
-    public int Color { get; set; }
+    public double Goodness { get; set; }
   }
 }
