@@ -18,7 +18,7 @@ namespace CommonLibraries.ColorAlgos
       Winter = SetWinter();
     }
 
-    private PersonalColor SetAutumn()
+    private static PersonalColor SetAutumn()
     {
       var result = new PersonalColor
       {
@@ -31,7 +31,7 @@ namespace CommonLibraries.ColorAlgos
       return result;
     }
 
-    private PersonalColor SetSpring()
+    private static PersonalColor SetSpring()
     {
       var result = new PersonalColor
       {
@@ -44,7 +44,7 @@ namespace CommonLibraries.ColorAlgos
       return result;
     }
 
-    private PersonalColor SetSummer()
+    private static PersonalColor SetSummer()
     {
       var result = new PersonalColor
       {
@@ -57,7 +57,7 @@ namespace CommonLibraries.ColorAlgos
       return result;
     }
 
-    private PersonalColor SetWinter()
+    private static PersonalColor SetWinter()
     {
       var result = new PersonalColor
       {
