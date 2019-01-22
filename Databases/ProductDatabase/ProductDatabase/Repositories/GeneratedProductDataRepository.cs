@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommonLibraries.CommonTypes;
+using CommonLibraries.Extensions;
 using Microsoft.EntityFrameworkCore;
 using ProductDatabase.DTOs;
 using ProductDatabase.Entities;
@@ -25,6 +27,14 @@ namespace ProductDatabase.Repositories
       var brand = await GetOrCreateBrandAsync(productDto.BrandName);
       var category = await GetOrCreateCategoryAsync(productDto.CategoryTypeId);
 
+      var color1Id = productDto.ColorIds.GetValueOrDefault(0, -1);
+      var color2Id = productDto.ColorIds.GetValueOrDefault(1, -1);
+      var color3Id = productDto.ColorIds.GetValueOrDefault(2, -1);
+      var color4Id = productDto.ColorIds.GetValueOrDefault(3, -1);
+      var color5Id = productDto.ColorIds.GetValueOrDefault(4, -1);
+      var color6Id = productDto.ColorIds.GetValueOrDefault(5, -1);
+      var color7Id = productDto.ColorIds.GetValueOrDefault(6, -1);
+
       var product = new ProductEntity
       {
         BrandId = brand.BrandId,
@@ -32,8 +42,15 @@ namespace ProductDatabase.Repositories
         ExtraPrintTypeId = productDto.ExtraPrintTypeId,
         CategoryId = category.CategoryId,
         ClicksCount = 0,
-        ShopColorId = productDto.ColorId,
-        ShopTypeId = 0,
+        ShopColorId = productDto.ShopColorId,
+        ShopTypeId = productDto.ShopTypeId,
+        Color1Id = color1Id,
+        Color2Id = color2Id,
+        Color3Id = color3Id,
+        Color4Id = color4Id,
+        Color5Id = color5Id,
+        Color6Id = color6Id,
+        Color7Id = color7Id,
         CreatedDate = DateTime.UtcNow,
         Description = "",
         IsAvailable = true,
@@ -53,7 +70,34 @@ namespace ProductDatabase.Repositories
       await Db.SaveChangesAsync();
 
       await AddProductSizes(product.ProductId, productDto.Sizes);
+
+      await AddColors(productDto.ColorIds);
+
       return product;
+    }
+
+    // TODO логика от цветового репозитория - вынести наверх потом, в другой класс, который будет разруливать это
+    private async Task AddColors(IEnumerable<int> colorIds)
+    {
+      var newColors = new List<ColorGoodnessEntity>();
+      foreach (var colorId in colorIds)
+        if (!await Db.ColorGoodnessEntities.AnyAsync(x => x.ColorId == colorId))
+        {
+          var autumn = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Autumn.Id };
+          var spring = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Spring.Id };
+          var summer = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Summer.Id };
+          var winter = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Winter.Id };
+
+          newColors.Add(autumn);
+          newColors.Add(spring);
+          newColors.Add(summer);
+          newColors.Add(winter);
+        }
+      if (newColors.Count != 0)
+      {
+        Db.ColorGoodnessEntities.AddRange(newColors);
+        await Db.SaveChangesAsync();
+      }
     }
 
     private async Task<CountryEntity> GetOrCreateCountryAsync(string countryName)
@@ -88,19 +132,6 @@ namespace ProductDatabase.Repositories
       await Db.SaveChangesAsync();
       return brandDb;
     }
-
-    //public async Task<ProductPhotoEntity> AddProductPhoto(int productId, string photoUrl)
-    //{
-    //  var product = await Db.ProductEntities.FirstOrDefaultAsync(x => x.ProductId == productId);
-    //  if (product == null) throw new System.Exception("product is null");
-
-    //  var photo = new ProductPhotoEntity {ProductId = productId, CreatedDate = DateTime.UtcNow, PhotoUrl = photoUrl};
-    //  Db.ProductPhotoEntities.Add(photo);
-    //  await Db.SaveChangesAsync();
-    //  product.PreviewPhotoId = photo.ProductPhotoId;
-    //  await Db.SaveChangesAsync();
-    //  return photo;
-    //}
 
     private async Task<List<ProductPhotoEntity>> AddProductPhotos(int productId, IEnumerable<string> photoUrls)
     {
