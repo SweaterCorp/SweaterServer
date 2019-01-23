@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SweaterData;
-using SweaterData.Repositories;
+using ProductDatabase;
+using ProductDatabase.Repositories;
 using SweaterMain.Infrastructure;
 
 namespace SweaterMain
@@ -31,9 +31,12 @@ namespace SweaterMain
       {
         options.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
       });
-      services.AddDbContext<SweaterMainContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SweaterMainConnection")));
+      services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SweaterMainConnection")));
       //services.Configure<ConnectionStrings>(options => options.SweaterConnection = Configuration.GetConnectionString("SweaterMainConnection"));
-      services.AddTransient<ProductRepository>();
+      services.AddTransient<QueriesRepository>();
+      services.AddTransient<ColorGoodnessRepository>();
+      services.AddTransient<GeneratedProductDataRepository>();
+      services.AddTransient<ProductColorGoodnessRepository>();
       services.AddTransient<UserRepository>();
       services.AddTransient<MediaService>();
       services.AddOptions();
