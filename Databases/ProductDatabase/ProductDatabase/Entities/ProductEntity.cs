@@ -13,6 +13,13 @@ namespace ProductDatabase.Entities
     public int BrandId { get; set; }
     public int ShopColorId { get; set; }
     public int ShopTypeId { get; set; }
+    public int Color1Id { get; set; }
+    public int Color2Id { get; set; }
+    public int Color3Id { get; set; }
+    public int Color4Id { get; set; }
+    public int Color5Id { get; set; }
+    public int Color6Id { get; set; }
+    public int Color7Id { get; set; }
     public int ClicksCount { get; set; }
     public string VendorCode { get; set; }
     public bool IsAvailable { get; set; }
