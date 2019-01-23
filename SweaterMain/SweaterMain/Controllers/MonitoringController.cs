@@ -1,8 +1,9 @@
-﻿using CommonLibraries.Response;
+﻿using System.Threading.Tasks;
+using CommonLibraries.Response;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SweaterData.Repositories;
+using ProductDatabase.Repositories;
 
 namespace SweaterMain.Controllers
 {
@@ -12,10 +13,10 @@ namespace SweaterMain.Controllers
   [ApiController]
   public class MonitoringController : ControllerBase
   {
-    private ProductRepository Db { get; }
-    private ILogger<UserController> Logger { get; }
+    private QueriesRepository Db { get; }
+    private ILogger<MonitoringController> Logger { get; }
 
-    public MonitoringController(ILogger<UserController> logger, ProductRepository db)
+    public MonitoringController(ILogger<MonitoringController> logger, QueriesRepository db)
     {
       Logger.LogInformation($"{nameof(MonitoringController)}.ctr.Start");
 
@@ -26,11 +27,11 @@ namespace SweaterMain.Controllers
     }
 
     [HttpPatch("click/category")]
-    public IActionResult IncrementCategoryClickCount([FromQuery] int categoryId)
+    public async Task<IActionResult> IncrementCategoryClickCount([FromQuery] int categoryId)
     {
       Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClickCount)}.Start");
 
-      Db.IncrementClickCategory(categoryId);
+      await Db.IncrementClickCategoryAsync(categoryId);
       var result = new NoContentResponseResult($"Click was added to category {categoryId}.");
 
       Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClickCount)}.End");
@@ -38,11 +39,11 @@ namespace SweaterMain.Controllers
     }
 
     [HttpPatch("click/product")]
-    public IActionResult IncrementProductClicksCount([FromQuery] int productId)
+    public async Task<IActionResult> IncrementProductClicksCount([FromQuery] int productId)
     {
       Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicksCount)}.Start");
 
-      Db.IncrementClickProduct(productId);
+      await Db.IncrementClickProductAsync(productId);
       var result = new NoContentResponseResult($"Click was added to product {productId}.");
 
       Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicksCount)}.End");
