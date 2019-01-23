@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SweaterData.Entities.ProductGroup;
+using ProductDatabase.Entities;
 
 namespace SweaterMain.ViewModels
 {
