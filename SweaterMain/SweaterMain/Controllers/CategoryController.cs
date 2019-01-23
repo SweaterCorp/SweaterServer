@@ -18,13 +18,13 @@ namespace SweaterMain.Controllers
   [EnableCors("AllowAllOrigin")]
   [Route("api/categories")]
   [ApiController]
-  public class CategoriesController : ControllerBase
+  public class CategoryController : ControllerBase
   {
     private QueriesRepository Db { get; }
-    private ColorRepository ColorDb { get; }
-    private ILogger<CategoriesController> Logger { get; }
+    private ColorGoodnessRepository ColorDb { get; }
+    private ILogger<CategoryController> Logger { get; }
 
-    public CategoriesController(ILogger<CategoriesController> logger, QueriesRepository db, ColorRepository colorDb)
+    public CategoryController(ILogger<CategoryController> logger, QueriesRepository db, ColorGoodnessRepository colorDb)
     {
       Logger = logger;
       Db = db;
@@ -34,19 +34,19 @@ namespace SweaterMain.Controllers
     [HttpGet]
     public async Task<IActionResult> GetCategories()
     {
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(GetCategories)}.Start");
+      Logger.LogInformation($"{nameof(CategoryController)}.{nameof(GetCategories)}.Start");
 
       var categories = await Db.GetCategoriesAsync();
       var result =  new OkResponseResult("Categories", new {Counts = categories.Count, Categories = categories});
 
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(GetCategories)}.End");
+      Logger.LogInformation($"{nameof(CategoryController)}.{nameof(GetCategories)}.End");
       return result;
     }
 
     [HttpGet("{categoryId}/brands")]
     public async Task<IActionResult> GetBrands(int categoryId)
     {
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(GetBrands)}.Start");
+      Logger.LogInformation($"{nameof(CategoryController)}.{nameof(GetBrands)}.Start");
 
       var category = await  Db.GetCategoryByIdAsync(categoryId);
       if (category == null) return new ResponseResult(HttpStatusCode.NotFound, $"There is no category with id:{categoryId}");
@@ -56,14 +56,14 @@ namespace SweaterMain.Controllers
       var result =  new OkResponseResult($"Brands for category:{category.CategoryId} {((CategoryType)category.CategoryTypeId).Name}.",
         new CategoryContainerViewModel<BrandEntity>(category, brands.Count, brands));
 
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(GetBrands)}.End");
+      Logger.LogInformation($"{nameof(CategoryController)}.{nameof(GetBrands)}.End");
       return result;
     }
 
     [HttpGet("{categoryId}/sizes")]
     public async Task<IActionResult> GetSizes(int categoryId)
     {
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(GetSizes)}.Start");
+      Logger.LogInformation($"{nameof(CategoryController)}.{nameof(GetSizes)}.Start");
 
       var category = await Db.GetCategoryByIdAsync(categoryId);
       if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
@@ -73,112 +73,112 @@ namespace SweaterMain.Controllers
       var result =  new OkResponseResult($"Sizes for category:{category.CategoryId} {((CategoryType)category.CategoryTypeId).Name}.",
         new CategoryContainerViewModel<SizeTypeEntity>(category, sizes.Count, sizes));
 
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(GetSizes)}.Start");
+      Logger.LogInformation($"{nameof(CategoryController)}.{nameof(GetSizes)}.Start");
       return result;
     }
 
 
-    [HttpGet("{categoryId}/products")]
-    public async Task<IActionResult> SelectProduct(int categoryId, [FromQuery] ProductsFilterViewModel filter)
-    {
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(SelectProduct)}.Start");
+    //[HttpGet("{categoryId}/products")]
+    //public async Task<IActionResult> SelectProduct(int categoryId, [FromQuery] ProductsFilterViewModel filter)
+    //{
+    //  Logger.LogInformation($"{nameof(CategoryController)}.{nameof(SelectProduct)}.Start");
 
-      var category = await Db.GetCategoryByIdAsync(categoryId);
-      if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
+    //  var category = await Db.GetCategoryByIdAsync(categoryId);
+    //  if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
 
-      var colors = await ColorDb.GetColorGoodness((PersonalColorType)filter.PersonalColorTypeId, (ColorGroupType)filter.ColorCategoryId);
+    //  var colors = await ColorDb.GetColorGoodness((PersonalColorType)filter.PersonalColorTypeId, (ColorGroupType)filter.ColorCategoryId);
 
-      (int counts, List<ProductCardDto> list) = await
-        Db.SelectProductsAsync(
-          new ProductsFilterDto
-          {
-            CategoryId = categoryId,
-            MinimalPrice = filter.MinimalPrice,
-            MaximalPrice = filter.MaximalPrice,
-            BrandsIds = filter.BrandsIds,
-            SizesIds = filter.SizesIds
-          }, filter.PageParams.Offset, filter.PageParams.Count);
+    //  (int counts, List<ProductCardDto> list) = await
+    //    Db.SelectProductsAsync(
+    //      new ProductsFilterDto
+    //      {
+    //        CategoryId = categoryId,
+    //        MinimalPrice = filter.MinimalPrice,
+    //        MaximalPrice = filter.MaximalPrice,
+    //        BrandsIds = filter.BrandsIds,
+    //        SizesIds = filter.SizesIds
+    //      }, filter.PageParams.Offset, filter.PageParams.Count);
 
-      for (int i = 0; i < list.Count; i++)
-      {
-        var product = list[i];
-        product.Goodness = GetColorGoodness(product.Product.Color1Id);
-        if (GetColorGoodness(product.Product.Color2Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color2Id);
-        if (GetColorGoodness(product.Product.Color3Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color3Id);
-        if (GetColorGoodness(product.Product.Color4Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color4Id);
-        if (GetColorGoodness(product.Product.Color5Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color5Id);
-        if (GetColorGoodness(product.Product.Color5Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color6Id);
-        if (GetColorGoodness(product.Product.Color6Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color7Id);
-        //product.Goodness = GetColorGoodness(product.Product.Color1Id) + GetColorGoodness(product.Product.Color2Id) +
-        //                   GetColorGoodness(product.Product.Color3Id) + GetColorGoodness(product.Product.Color4Id) +
-        //                   GetColorGoodness(product.Product.Color5Id) + GetColorGoodness(product.Product.Color6Id) +
-        //                   GetColorGoodness(product.Product.Color7Id);
-      }
-
-
-      var result = new OkResponseResult($"Products for category:{category.CategoryId} {((CategoryType)category.CategoryTypeId).Name}.",
-        new { Category = category, AllCounts = counts, Data = new { Counts = list.Count, Products = list.OrderByDescending(x => x.Goodness).Skip(filter.PageParams.Offset).Take(filter.PageParams.Count) } });
-
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(SelectProduct)}.Start");
-      return result;
-
-      double GetColorGoodness(int colorId)
-      {
-        if (colorId == -1) return 0.0;
-        return colors.Find(x => x.ColorId == colorId).Goodness;
-      }
-    }
+    //  for (int i = 0; i < list.Count; i++)
+    //  {
+    //    var product = list[i];
+    //    product.Goodness = GetColorGoodness(product.Product.Color1Id);
+    //    if (GetColorGoodness(product.Product.Color2Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color2Id);
+    //    if (GetColorGoodness(product.Product.Color3Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color3Id);
+    //    if (GetColorGoodness(product.Product.Color4Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color4Id);
+    //    if (GetColorGoodness(product.Product.Color5Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color5Id);
+    //    if (GetColorGoodness(product.Product.Color5Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color6Id);
+    //    if (GetColorGoodness(product.Product.Color6Id) > product.Goodness) product.Goodness = GetColorGoodness(product.Product.Color7Id);
+    //    //product.Goodness = GetColorGoodness(product.Product.Color1Id) + GetColorGoodness(product.Product.Color2Id) +
+    //    //                   GetColorGoodness(product.Product.Color3Id) + GetColorGoodness(product.Product.Color4Id) +
+    //    //                   GetColorGoodness(product.Product.Color5Id) + GetColorGoodness(product.Product.Color6Id) +
+    //    //                   GetColorGoodness(product.Product.Color7Id);
+    //  }
 
 
-    [HttpGet("{categoryId}/select_product_with_special_color")]
-    public async Task<IActionResult> SelectProduct(int categoryId, [FromQuery] ProductsFilterWithColorViewModel filter)
-    {
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(SelectProduct)}.Start");
+    //  var result = new OkResponseResult($"Products for category:{category.CategoryId} {((CategoryType)category.CategoryTypeId).Name}.",
+    //    new { Category = category, AllCounts = counts, Data = new { Counts = list.Count, Products = list.OrderByDescending(x => x.Goodness).Skip(filter.PageParams.Offset).Take(filter.PageParams.Count) } });
 
-      var category = await Db.GetCategoryByIdAsync(categoryId);
-      if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
+    //  Logger.LogInformation($"{nameof(CategoryController)}.{nameof(SelectProduct)}.Start");
+    //  return result;
 
-      var colors = await ColorDb.GetColorGoodness((PersonalColorType)filter.PersonalColorTypeId, (ColorGroupType)filter.ColorCategoryId);
-
-      (int counts, List<ProductCardDto> list) = await 
-        Db.SelectProductsAsync(
-          new ProductsFilterDto
-          {
-            CategoryId = categoryId,
-            MinimalPrice = filter.MinimalPrice,
-            MaximalPrice = filter.MaximalPrice,
-            BrandsIds = filter.BrandsIds,
-            SizesIds = filter.SizesIds
-          }, filter.PageParams.Offset, filter.PageParams.Count);
-
-      for (int i = 0; i < list.Count; i++)
-      {
-        var product = list[i];
-        product.Goodness = GetColorGoodness(product.Product.Color1Id);
-        if (GetColorGoodness(product.Product.Color2Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color2Id);
-        if (GetColorGoodness(product.Product.Color3Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color3Id);
-        if (GetColorGoodness(product.Product.Color4Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color4Id);
-        if (GetColorGoodness(product.Product.Color5Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color5Id);
-        if (GetColorGoodness(product.Product.Color5Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color6Id);
-        if (GetColorGoodness(product.Product.Color6Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color7Id);
-        //product.Goodness = GetColorGoodness(product.Product.Color1Id) + GetColorGoodness(product.Product.Color2Id) +
-        //                   GetColorGoodness(product.Product.Color3Id) + GetColorGoodness(product.Product.Color4Id) +
-        //                   GetColorGoodness(product.Product.Color5Id) + GetColorGoodness(product.Product.Color6Id) +
-        //                   GetColorGoodness(product.Product.Color7Id);
-      }
+    //  double GetColorGoodness(int colorId)
+    //  {
+    //    if (colorId == -1) return 0.0;
+    //    return colors.Find(x => x.ColorId == colorId).Goodness;
+    //  }
+    //}
 
 
-      var result = new OkResponseResult($"Products for category:{category.CategoryId} {((CategoryType)category.CategoryTypeId).Name}.",
-        new { Category = category, AllCounts = counts, Data = new { Counts = list.Count, Products = list.OrderByDescending(x=>x.Goodness).Skip(filter.PageParams.Offset).Take(filter.PageParams.Count) } });
+    //[HttpGet("{categoryId}/select_product_with_special_color")]
+    //public async Task<IActionResult> SelectProduct(int categoryId, [FromQuery] ProductsFilterWithColorViewModel filter)
+    //{
+    //  Logger.LogInformation($"{nameof(CategoryController)}.{nameof(SelectProduct)}.Start");
 
-      Logger.LogInformation($"{nameof(CategoriesController)}.{nameof(SelectProduct)}.Start");
-      return result;
+    //  var category = await Db.GetCategoryByIdAsync(categoryId);
+    //  if (category == null) return new NotFoundResponseResult($"There is no category with id:{categoryId}");
 
-      double GetColorGoodness(int colorId)
-      {
-        if (colorId == -1) return 0.0;
-        return colors.Find(x => x.ColorId == colorId).Goodness;
-      }
-    }
+    //  var colors = await ColorDb.GetColorGoodness((PersonalColorType)filter.PersonalColorTypeId, (ColorGroupType)filter.ColorCategoryId);
+
+    //  (int counts, List<ProductCardDto> list) = await 
+    //    Db.SelectProductsAsync(
+    //      new ProductsFilterDto
+    //      {
+    //        CategoryId = categoryId,
+    //        MinimalPrice = filter.MinimalPrice,
+    //        MaximalPrice = filter.MaximalPrice,
+    //        BrandsIds = filter.BrandsIds,
+    //        SizesIds = filter.SizesIds
+    //      }, filter.PageParams.Offset, filter.PageParams.Count);
+
+    //  for (int i = 0; i < list.Count; i++)
+    //  {
+    //    var product = list[i];
+    //    product.Goodness = GetColorGoodness(product.Product.Color1Id);
+    //    if (GetColorGoodness(product.Product.Color2Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color2Id);
+    //    if (GetColorGoodness(product.Product.Color3Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color3Id);
+    //    if (GetColorGoodness(product.Product.Color4Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color4Id);
+    //    if (GetColorGoodness(product.Product.Color5Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color5Id);
+    //    if (GetColorGoodness(product.Product.Color5Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color6Id);
+    //    if (GetColorGoodness(product.Product.Color6Id) > product.Goodness)product.Goodness = GetColorGoodness(product.Product.Color7Id);
+    //    //product.Goodness = GetColorGoodness(product.Product.Color1Id) + GetColorGoodness(product.Product.Color2Id) +
+    //    //                   GetColorGoodness(product.Product.Color3Id) + GetColorGoodness(product.Product.Color4Id) +
+    //    //                   GetColorGoodness(product.Product.Color5Id) + GetColorGoodness(product.Product.Color6Id) +
+    //    //                   GetColorGoodness(product.Product.Color7Id);
+    //  }
+
+
+    //  var result = new OkResponseResult($"Products for category:{category.CategoryId} {((CategoryType)category.CategoryTypeId).Name}.",
+    //    new { Category = category, AllCounts = counts, Data = new { Counts = list.Count, Products = list.OrderByDescending(x=>x.Goodness).Skip(filter.PageParams.Offset).Take(filter.PageParams.Count) } });
+
+    //  Logger.LogInformation($"{nameof(CategoryController)}.{nameof(SelectProduct)}.Start");
+    //  return result;
+
+    //  double GetColorGoodness(int colorId)
+    //  {
+    //    if (colorId == -1) return 0.0;
+    //    return colors.Find(x => x.ColorId == colorId).Goodness;
+    //  }
+    //}
   }
 }
