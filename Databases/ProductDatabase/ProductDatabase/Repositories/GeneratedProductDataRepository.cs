@@ -10,11 +10,11 @@ using ProductDatabase.Entities;
 
 namespace ProductDatabase.Repositories
 {
-  public class ProductRepository
+  public class GeneratedProductDataRepository
   {
     private ProductContext Db { get; }
 
-    public ProductRepository(ProductContext db)
+    public GeneratedProductDataRepository(ProductContext db)
     {
       Db = db;
     }
@@ -71,13 +71,13 @@ namespace ProductDatabase.Repositories
 
       await AddProductSizes(product.ProductId, productDto.Sizes);
 
-      await AddColors(productDto.ColorIds);
+      await AddColorGoodnesses(productDto.ColorIds);
 
       return product;
     }
 
     // TODO логика от цветового репозитория - вынести наверх потом, в другой класс, который будет разруливать это
-    private async Task AddColors(IEnumerable<int> colorIds)
+    private async Task AddColorGoodnesses(IEnumerable<int> colorIds)
     {
       var newColors = new List<ColorGoodnessEntity>();
       foreach (var colorId in colorIds)
@@ -96,6 +96,29 @@ namespace ProductDatabase.Repositories
       if (newColors.Count != 0)
       {
         Db.ColorGoodnessEntities.AddRange(newColors);
+        await Db.SaveChangesAsync();
+      }
+    }
+
+    private async Task AddProductGoodnesses(IEnumerable<int> productIds)
+    {
+      var newColors = new List<ProductColorGoodnessEntity>();
+      foreach (var productId in productIds)
+        if (!await Db.ColorGoodnessEntities.AnyAsync(x => x.ColorId == productId))
+        {
+          var autumn = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Autumn.Id };
+          var spring = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Spring.Id };
+          var summer = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Summer.Id };
+          var winter = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Winter.Id };
+
+          newColors.Add(autumn);
+          newColors.Add(spring);
+          newColors.Add(summer);
+          newColors.Add(winter);
+        }
+      if (newColors.Count != 0)
+      {
+        Db.ProductColorGoodnessEntities.AddRange(newColors);
         await Db.SaveChangesAsync();
       }
     }
