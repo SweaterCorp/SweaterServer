@@ -12,6 +12,9 @@ namespace ProductDatabase
     public virtual DbSet<ProductSizeTypeEntity> ProductSizeTypeEntities { get; set; }
     public virtual DbSet<SizeTypeEntity> SizeTypeEntities { get; set; }
     public virtual DbSet<CountryEntity> CountryEntities { get; set; }
+    public virtual DbSet<ColorGoodnessEntity> ColorGoodnessEntities { get; set; }
+    public virtual DbSet<ProductColorGoodnessEntity> ProductColorGoodnessEntities { get; set; }
+    public virtual DbSet<UserEntity> UserEntities { get; set; }
 
     public ProductContext(DbContextOptions options) : base(options)
     {
