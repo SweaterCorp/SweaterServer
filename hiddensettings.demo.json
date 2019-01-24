@@ -1,0 +1,33 @@
+﻿{
+  "JwtSettings": {
+    "SecretKey": "",
+    "Issuer": "",
+    "Audience": ""
+  },
+  "FacebookAuthSettings": {
+    "AppId": "",
+    "AppSecret": "",
+    "RedirectUri": ""
+  },
+ "FacebookAuthSettingsTest": {
+    "AppId": "",
+    "AppSecret": "f",
+    "RedirectUri": ""
+  },
+  "VkAuthSettings": {
+    "AppId": "",
+    "AppSecret": "",
+    "AppAccess": "",
+    "RedirectUri": ""
+  },
+  "VkAuthSettingsTest": {
+    "AppId": "",
+    "AppSecret": "",
+    "AppAccess": "",
+    "RedirectUri": ""
+  },
+  "ConnectionStrings": {
+    "SweaterMainConnection": "",
+    "SweaterAccountConnection": ""
+  }
+}
