@@ -7,6 +7,9 @@ using ProductDatabase.Repositories;
 
 namespace SweaterMain.Controllers
 {
+  /// <summary>
+  ///   Monitoring users behaviors.
+  /// </summary>
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]
   [Route("api/monitoring")]
@@ -27,46 +30,42 @@ namespace SweaterMain.Controllers
     }
 
     /// <summary>
-    /// Creates a TodoItem.
+    ///   Increment category click.
     /// </summary>
-    /// <remarks>
-    /// Sample request:
-    ///
-    ///     POST /Todo
-    ///     {
-    ///        "id": 1,
-    ///        "name": "Item1",
-    ///        "isComplete": true
-    ///     }
-    ///
-    /// </remarks>
-    /// <param name="item"></param>
-    /// <returns>A newly created TodoItem</returns>
-    /// <response code="201">Returns the newly created item</response>
-    /// <response code="400">If the item is null</response>            
-    [ProducesResponseType(201)]
-    [ProducesResponseType(400)]
+    /// <param name="categoryId"></param>
+    /// <returns>Message if everything OK</returns>
+    /// <response code="201">Returns message, that everything is OK</response>
     [HttpPatch("click/category")]
-    public async Task<IActionResult> IncrementCategoryClickCount([FromQuery] int categoryId)
+    [ProducesResponseType(typeof(ResponseObject), 200)]
+    [ProducesResponseType(typeof(ResponseObject), 400)]
+    public async Task<IActionResult> IncrementCategoryClick([FromQuery] int categoryId)
     {
-      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClickCount)}.Start");
+      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClick)}.Start");
 
       await Db.IncrementClickCategoryAsync(categoryId);
       var result = new NoContentResponseResult($"Click was added to category {categoryId}.");
 
-      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClickCount)}.End");
+      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementCategoryClick)}.End");
       return result;
     }
 
+    /// <summary>
+    ///   Increment category click.
+    /// </summary>
+    /// <param name="productId"></param>
+    /// <returns>Message if everything OK</returns>
+    /// <response code="201">Returns message, that everything is OK</response>
     [HttpPatch("click/product")]
-    public async Task<IActionResult> IncrementProductClicksCount([FromQuery] int productId)
+    [ProducesResponseType(typeof(ResponseObject), 200)]
+    [ProducesResponseType(typeof(ResponseObject), 400)]
+    public async Task<IActionResult> IncrementProductClicks([FromQuery] int productId)
     {
-      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicksCount)}.Start");
+      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicks)}.Start");
 
       await Db.IncrementClickProductAsync(productId);
       var result = new NoContentResponseResult($"Click was added to product {productId}.");
 
-      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicksCount)}.End");
+      Logger.LogInformation($"{nameof(MonitoringController)}.{nameof(IncrementProductClicks)}.End");
       return result;
     }
   }
