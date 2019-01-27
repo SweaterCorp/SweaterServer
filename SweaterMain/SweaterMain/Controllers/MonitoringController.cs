@@ -13,10 +13,10 @@ namespace SweaterMain.Controllers
   [ApiController]
   public class MonitoringController : ControllerBase
   {
-    private QueriesRepository Db { get; }
+    private MonitoringRepository Db { get; }
     private ILogger<MonitoringController> Logger { get; }
 
-    public MonitoringController(ILogger<MonitoringController> logger, QueriesRepository db)
+    public MonitoringController(ILogger<MonitoringController> logger, MonitoringRepository db)
     {
       Logger.LogInformation($"{nameof(MonitoringController)}.ctr.Start");
 
@@ -26,6 +26,26 @@ namespace SweaterMain.Controllers
       Logger.LogInformation($"{nameof(MonitoringController)}.ctr.End");
     }
 
+    /// <summary>
+    /// Creates a TodoItem.
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /Todo
+    ///     {
+    ///        "id": 1,
+    ///        "name": "Item1",
+    ///        "isComplete": true
+    ///     }
+    ///
+    /// </remarks>
+    /// <param name="item"></param>
+    /// <returns>A newly created TodoItem</returns>
+    /// <response code="201">Returns the newly created item</response>
+    /// <response code="400">If the item is null</response>            
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
     [HttpPatch("click/category")]
     public async Task<IActionResult> IncrementCategoryClickCount([FromQuery] int categoryId)
     {
