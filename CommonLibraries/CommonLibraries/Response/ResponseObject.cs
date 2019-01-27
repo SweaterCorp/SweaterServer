@@ -44,4 +44,16 @@ namespace CommonLibraries.Response
       }
     }
   }
+
+  public class ResponseObject<T> :  ResponseObject
+  {
+
+    [JsonProperty("data")]
+    public new T Data { get; set; }
+
+    public ResponseObject(HttpStatusCode status, string message, T data) : base(status, message, data)
+    {
+      Data = data;
+    }
+  }
 }
