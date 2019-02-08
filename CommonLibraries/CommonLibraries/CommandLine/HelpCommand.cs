@@ -12,7 +12,11 @@ namespace CommonLibraries.CommandLine
 
     public void Run()
     {
-      if (CommandName == "host") Console.WriteLine("-p|--port is for defining the port");
+      if (CommandName == "host")
+      {
+        Console.WriteLine("-p|--port is for defining the port");
+        Console.WriteLine("-sw|--swagger is for creating json swagger info");
+      }
     }
   }
 }
