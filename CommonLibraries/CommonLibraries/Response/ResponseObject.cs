@@ -1,8 +1,22 @@
-﻿using System.Net;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace CommonLibraries.Response
 {
+  public enum HttpStatusCode
+  {
+    OK = System.Net.HttpStatusCode.OK,
+    Created = System.Net.HttpStatusCode.Created,
+    NoContent = System.Net.HttpStatusCode.NoContent,
+    Accepted = System.Net.HttpStatusCode.Accepted,
+    NotModified = System.Net.HttpStatusCode.NotModified,
+    BadRequest = System.Net.HttpStatusCode.BadRequest,
+    Unauthorized = System.Net.HttpStatusCode.Unauthorized,
+    Forbidden = System.Net.HttpStatusCode.Forbidden,
+    NotFound = System.Net.HttpStatusCode.NotFound,
+    Conflict = System.Net.HttpStatusCode.Conflict,
+    InternalServerError = System.Net.HttpStatusCode.InternalServerError
+  }
+
   public class ResponseObject
   {
     [JsonProperty("status")]
