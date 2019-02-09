@@ -22,14 +22,17 @@ namespace ProductDatabase.Repositories
       return newUser;
     }
 
+    public async Task<UserEntity> UpdateUser(UserEntity userEntity)
+    {
+      Db.UserEntities.Update(userEntity);
+      await Db.SaveChangesAsync();
+      return userEntity;
+    }
+
+
     public async Task<UserEntity> GetUser(string phoneImei)
     {
       return await Db.UserEntities.FirstOrDefaultAsync(x => x.PhoneIMEI == phoneImei);
-    }
-
-    public async Task<UserEntity> GetUser(int userId)
-    {
-      return await Db.UserEntities.FindAsync(userId);
     }
   }
 }
