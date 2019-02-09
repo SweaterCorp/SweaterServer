@@ -18,9 +18,9 @@ namespace ProductDatabase.Repositories
 
     public async Task FillColorGoodnessesFromProducts()
     {
-      var colors = new List<int> {0};
+      var colors = new List<int> { 0 };
       var dbColors = await Db.ProductEntities
-        .Select(x => new List<int> {x.Color1Id, x.Color2Id, x.Color3Id, x.Color4Id, x.Color5Id, x.Color6Id, x.Color7Id})
+        .Select(x => new List<int> { x.Color1Id, x.Color2Id, x.Color3Id, x.Color4Id, x.Color5Id, x.Color6Id, x.Color7Id })
         .ToListAsync();
       foreach (var dbColor in dbColors) colors.AddRange(dbColor);
 
@@ -33,10 +33,10 @@ namespace ProductDatabase.Repositories
       foreach (var colorId in colorIds)
         if (!await Db.ColorGoodnessEntities.AnyAsync(x => x.ColorId == colorId))
         {
-          var autumn = new ColorGoodnessEntity {ColorId = colorId, PersonalColorTypeId = PersonalColorType.Autumn.Id};
-          var spring = new ColorGoodnessEntity {ColorId = colorId, PersonalColorTypeId = PersonalColorType.Spring.Id};
-          var summer = new ColorGoodnessEntity {ColorId = colorId, PersonalColorTypeId = PersonalColorType.Summer.Id};
-          var winter = new ColorGoodnessEntity {ColorId = colorId, PersonalColorTypeId = PersonalColorType.Winter.Id};
+          var autumn = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Autumn.Id };
+          var spring = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Spring.Id };
+          var summer = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Summer.Id };
+          var winter = new ColorGoodnessEntity { ColorId = colorId, PersonalColorTypeId = PersonalColorType.Winter.Id };
 
           newColors.Add(autumn);
           newColors.Add(spring);
