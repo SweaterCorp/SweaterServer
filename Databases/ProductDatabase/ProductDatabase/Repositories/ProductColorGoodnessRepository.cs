@@ -30,7 +30,7 @@ namespace ProductDatabase.Repositories
     {
       var newColors = new List<ProductColorGoodnessEntity>();
       foreach (var productId in productIds)
-        if (!await Db.ColorGoodnessEntities.AnyAsync(x => x.ColorId == productId))
+        if (!await Db.ProductColorGoodnessEntities.AnyAsync(x => x.ProductId == productId))
         {
           var autumn = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Autumn.Id };
           var spring = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Spring.Id };
@@ -56,8 +56,6 @@ namespace ProductDatabase.Repositories
 
     public async Task UpdateColorGoodnesses(IEnumerable<ProductColorGoodnessEntity> productColorGoodnesses)
     {
-      //Db.Database.ExecuteSqlCommand("TRUNCATE TABLE [ColorMatching]");
-      //await Db.ColorMatchingEntities.AddRangeAsync(colors);
       Db.ProductColorGoodnessEntities.UpdateRange(productColorGoodnesses);
       await Db.SaveChangesAsync();
     }
