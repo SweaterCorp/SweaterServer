@@ -44,51 +44,44 @@ namespace ProductDatabase.Repositories
       return await Db.BrandEntities.FromSql($"SELECT * FROM [dbo].[ufnGetCategoryBrands]({categoryId})").ToListAsync();
     }
 
-    public async Task IncrementClickCategoryAsync(int categoryId)
-    {
-      var category = Db.CategoryEntities.First(x => x.CategoryId == categoryId);
-      category.ClicksCount++;
-      await Db.SaveChangesAsync();
-    }
-
-    public async Task IncrementClickProductAsync(int productId)
-    {
-      var product = Db.ProductEntities.First(x => x.ProductId == productId);
-      product.ClicksCount++;
-      await Db.SaveChangesAsync();
-    }
-
-    public async Task<(int counts, List<ProductCardDto> list)> SelectProductsAsync(ProductsFilterDto filter, int offset,
+    
+    public async Task<(int counts, List<ProductCardDto> list)> SelectProductsAsync(ProductFilterDto filter, int offset,
       int count)
     {
-      var allCounts = 0;
-      var products = Db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId &&
-                                                   x.Price >= filter.MinimalPrice && x.Price <= filter.MaximalPrice);
+      var products = Db.ProductEntities.Where(x => x.CategoryId == filter.CategoryId && x.Price >= filter.MinimalPrice && x.Price <= filter.MaximalPrice);
 
       if (filter.BrandIds.Any()) products = products.Where(x => filter.BrandIds.Contains(x.BrandId));
 
+      var productGoodnesses = Db.ProductColorGoodnessEntities.Where(x => x.PersonalColorTypeId == filter.PersonalColorType.Id);
+
       var resultQuery = from product in products
-        join productColorGoodness in
-        Db.ProductColorGoodnessEntities.Where(x => x.PersonalColorTypeId == filter.PersonalColorType.Id) on
-        product.ProductId equals productColorGoodness.ProductId
+        join productColorGoodness in productGoodnesses on product.ProductId equals productColorGoodness.ProductId
         join brand in Db.BrandEntities on product.BrandId equals brand.BrandId
+        join photo in Db.ProductPhotoEntities on product.ProductId equals photo.ProductId
         orderby productColorGoodness.Goodness descending
-        select new ProductCardDto {Product = product, Goodness = productColorGoodness.Goodness, Brand = brand};
+
+        select new {product, brand, productColorGoodness, photo} into selectResult
+        group selectResult by selectResult.product into groupByProduct
+        select new ProductCardDto
+        {
+          Product = groupByProduct.Key,
+          Goodness = groupByProduct.First(x=>x.product.ProductId == groupByProduct.Key.ProductId).productColorGoodness.Goodness,
+          Brand = groupByProduct.First(x => x.product.ProductId == groupByProduct.Key.ProductId).brand,
+          ProductPhotos = groupByProduct.Where(x => x.product.ProductId == groupByProduct.Key.ProductId).Select(x=>x.photo)
+        };
 
       var result = await resultQuery.ToListAsync();
 
-      allCounts = result.Count;
+      var allCounts = result.Count;
 
       var ids = result.Select(x => x.Product.ProductId).ToList();
       var sizes = await GetProductsSizes(ids);
 
-      var wherePredicate = filter.SizeIds.Any()
-        ? (x => filter.SizeIds.Contains(x.SizeTypeId))
-        : (Func<SizeTypeEntity, bool>) (x => true);
+      var sizePredicate = filter.SizeIds.Any() ? (x => filter.SizeIds.Contains(x.SizeTypeId)) : (Func<SizeTypeEntity, bool>) (x => true);
 
       foreach (var productCardDto in result)
         productCardDto.Sizes = sizes.First(x => x.ProductId == productCardDto.Product.ProductId).Sizes
-          .Where(wherePredicate).ToList();
+          .Where(sizePredicate).ToList();
 
       return (allCounts, result.Skip(offset).Take(count).Where(x => x.Sizes.Any()).ToList());
     }
@@ -97,10 +90,21 @@ namespace ProductDatabase.Repositories
 
     private async Task<List<ProductSize>> GetProductsSizes(ICollection<int> productsIds)
     {
-      return await Db.ProductSizeTypeEntities.Where(productSize => productsIds.Contains(productSize.ProductId))
-        .GroupJoin(Db.SizeTypeEntities, productSize => productSize.SizeTypeId, size => size.SizeTypeId,
-          (productSize, sizes) => new ProductSize {ProductId = productSize.ProductId, Sizes = sizes.Select(x => x)})
-        .ToListAsync();
+
+      var result =
+        from productSize in Db.ProductSizeTypeEntities.Where(productSize => productsIds.Contains(productSize.ProductId))
+        join size in Db.SizeTypeEntities on productSize.SizeTypeId equals size.SizeTypeId
+        select new {productSize, size}
+        into selectResult
+        group selectResult by selectResult.productSize.ProductId
+        into g
+        select new ProductSize
+        {
+          ProductId = g.Key,
+          Sizes = g.Where(x => x.productSize.ProductId == g.Key).Select(x => x.size)
+        };
+
+      return await result.ToListAsync();
     }
 
     private class ProductSize
