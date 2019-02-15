@@ -27,6 +27,10 @@ namespace SweaterMain.Controllers
       Db = db;
     }
 
+    /// <summary>
+    /// Get Personal Colors
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("personal")]
     public IActionResult GetPersonalColors()
     {
@@ -38,9 +42,14 @@ namespace SweaterMain.Controllers
       var skinColors = collection.Autumn.EyeColors.Union(collection.Spring.SkinTones).Union(collection.Summer.SkinTones)
         .Union(collection.Winter.SkinTones);
 
-      return new OkResponseResult(new {EyeColors = eyeColors, HairColors = hairColors, SkinTones = skinColors});
+      return new OkResponseResult(new { EyeColors = eyeColors, HairColors = hairColors, SkinTones = skinColors });
     }
 
+
+    /// <summary>
+    /// Get colors
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public IActionResult GetColors()
     {
@@ -101,7 +110,7 @@ namespace SweaterMain.Controllers
         }
       };
       Logger.LogInformation($"{nameof(ColorController)}.{nameof(GetColors)}.Start");
-      return new OkResponseResult("Colors:", new {Colors = result});
+      return new OkResponseResult("Colors:", new { Colors = result });
     }
   }
 }
