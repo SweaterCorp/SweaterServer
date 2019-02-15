@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProductDatabase;
 using ProductDatabase.Repositories;
+using Swashbuckle.AspNetCore.Swagger;
 using SweaterMain.Infrastructure;
 
 namespace SweaterMain
@@ -32,41 +33,24 @@ namespace SweaterMain
         options.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
       });
       services.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SweaterMainConnection")));
-      //services.Configure<ConnectionStrings>(options => options.SweaterConnection = Configuration.GetConnectionString("SweaterMainConnection"));
       services.AddTransient<QueriesRepository>();
       services.AddTransient<ColorGoodnessRepository>();
-      services.AddTransient<GeneratedProductDataRepository>();
+      services.AddTransient<ProductRepository>();
       services.AddTransient<ProductColorGoodnessRepository>();
       services.AddTransient<UserRepository>();
-      services.AddTransient<MediaService>();
+      services.AddTransient<MonitoringRepository>();
       services.AddOptions();
       services.Configure<ServersSettings>(Configuration.GetSection("ServersSettings"));
-      services.Configure<MediaSettings>(Configuration.GetSection("MediaFolder"));
 
-      //var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtSettings));
-      //var secretKey = jwtAppSettingOptions["SecretKey"];
-      //var issuer = jwtAppSettingOptions[nameof(JwtSettings.Issuer)];
-      //var audience = jwtAppSettingOptions[nameof(JwtSettings.Audience)];
-
-      //services.Configure<JwtSettings>(options =>
-      //{
-      //  options.Issuer = issuer;
-      //  options.Audience = audience;
-      //  options.SigningCredentials = new SigningCredentials(JwtSettings.CreateSecurityKey(secretKey),
-      //    SecurityAlgorithms.HmacSha256);
-      //});
-
-      //services.AddAuthentication(options =>
-      //{
-      //  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-      //  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-      //}).AddJwtBearer(configureOptions =>
-      //{
-      //  configureOptions.ClaimsIssuer = issuer;
-      //  configureOptions.RequireHttpsMetadata = false;
-      //  configureOptions.TokenValidationParameters =
-      //    JwtSettings.CreateTokenValidationParameters(issuer, audience, JwtSettings.CreateSecurityKey(secretKey));
-      //});
+      services.AddSwaggerGen(c =>
+      {
+        c.SwaggerDoc("v1", new Info
+        {
+          Version = "v1",
+          Title = "Sweater Server API",
+          Description = "API for Sweater Server"
+        });
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +58,16 @@ namespace SweaterMain
     {
       if (env.IsDevelopment()) loggerFactory.AddConsole(Configuration.GetSection("Logging"));
       loggerFactory.AddDebug();
+
       app.UseExceptionHandling();
+
+      app.UseSwagger();
+      app.UseSwaggerUI(c =>
+      {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sweater Server API");
+        c.RoutePrefix = string.Empty;
+      });
+
 
       app.UseDefaultFiles();
       app.UseStaticFiles();
