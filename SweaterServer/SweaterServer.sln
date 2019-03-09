@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLibraries", "..\Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductDatabase", "..\Databases\ProductDatabase\ProductDatabase\ProductDatabase.csproj", "{69416050-71E1-4338-B742-B19804D058F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweaterMain", "SweaterMain\SweaterMain.csproj", "{572F4039-3F34-4628-8156-ECD9ECAAADBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweaterServer", "SweaterMain\SweaterServer.csproj", "{572F4039-3F34-4628-8156-ECD9ECAAADBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
