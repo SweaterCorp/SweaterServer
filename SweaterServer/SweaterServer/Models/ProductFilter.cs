@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using SweaterServer.ViewModels;
 
-namespace SweaterServer.ViewModels
+namespace SweaterServer.Models
 {
-  public class ProductFilterViewModel
+  public class ProductFilter
   {
     [Required]
     public int CategoryId { get; set; }
