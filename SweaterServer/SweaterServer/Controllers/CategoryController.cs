@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CommonLibraries.CommonTypes;
 using CommonLibraries.Response;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProductDatabase.DTOs;
 using ProductDatabase.Entities;
 using ProductDatabase.Repositories;
-using SweaterMain.ViewModels;
+using SweaterServer.ViewModels;
 
-namespace SweaterMain.Controllers
+namespace SweaterServer.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]

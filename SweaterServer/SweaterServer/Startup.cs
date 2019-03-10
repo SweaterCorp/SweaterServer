@@ -11,9 +11,8 @@ using Microsoft.Extensions.Logging;
 using ProductDatabase;
 using ProductDatabase.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
-using SweaterMain.Infrastructure;
 
-namespace SweaterMain
+namespace SweaterServer
 {
   public class Startup
   {

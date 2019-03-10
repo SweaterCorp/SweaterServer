@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ProductDatabase.Entities;
 
-namespace SweaterMain.ViewModels
+namespace SweaterServer.ViewModels
 {
   public class CategoryContainerViewModel<T>
   {

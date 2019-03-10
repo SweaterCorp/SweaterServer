@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SweaterMain.ViewModels
+namespace SweaterServer.ViewModels
 {
   public class CreateUserViewModel
   {

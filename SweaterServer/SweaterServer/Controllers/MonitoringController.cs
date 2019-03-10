@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductDatabase.Repositories;
 
-namespace SweaterMain.Controllers
+namespace SweaterServer.Controllers
 {
   /// <summary>
   ///   Monitoring users behaviors.

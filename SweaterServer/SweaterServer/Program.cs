@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 
-namespace SweaterMain
+namespace SweaterServer
 {
   public class Program
   {

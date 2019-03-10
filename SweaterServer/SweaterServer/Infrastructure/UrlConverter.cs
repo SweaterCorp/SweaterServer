@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SweaterMain.Infrastructure
+namespace SweaterServer.Infrastructure
 {
   public class UrlConverter
   {

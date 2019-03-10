@@ -1,4 +1,4 @@
-﻿namespace SweaterMain.ViewModels
+﻿namespace SweaterServer.ViewModels
 {
   public class TypeViewModel
   {

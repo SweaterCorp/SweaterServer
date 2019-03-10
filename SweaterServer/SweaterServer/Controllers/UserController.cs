@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using CommonLibraries.ColorAlgos;
 using CommonLibraries.CommonTypes;
@@ -11,9 +10,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using ProductDatabase.DTOs;
 using ProductDatabase.Repositories;
-using SweaterMain.ViewModels;
+using SweaterServer.ViewModels;
 
-namespace SweaterMain.Controllers
+namespace SweaterServer.Controllers
 {
   /// <summary>
   /// Url path to work with user entities

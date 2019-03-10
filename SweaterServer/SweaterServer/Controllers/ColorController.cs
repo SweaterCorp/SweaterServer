@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductDatabase.Repositories;
-using SweaterMain.ViewModels;
+using SweaterServer.ViewModels;
 
-namespace SweaterMain.Controllers
+namespace SweaterServer.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]

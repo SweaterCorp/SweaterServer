@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ProductDatabase.DTOs;
-using SweaterMain.Infrastructure;
+using SweaterServer.Infrastructure;
 
-namespace SweaterMain.ViewModels
+namespace SweaterServer.ViewModels
 {
   public class ProductViewModel
   {

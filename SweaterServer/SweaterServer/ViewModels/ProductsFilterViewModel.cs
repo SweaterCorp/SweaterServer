@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SweaterMain.ViewModels
+namespace SweaterServer.ViewModels
 {
   public class ProductFilterViewModel
   {
