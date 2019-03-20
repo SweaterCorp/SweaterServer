@@ -2,17 +2,17 @@
 {
   public class TypeViewModel
   {
-    public TypeViewModel() { }
+    public int Id { get; set; }
+    public string DisplayedName { get; set; }
 
-    public TypeViewModel(int id, string key, string displayedName)
+    public TypeViewModel()
     {
-      Id = id;
-      Key = key;
-      DisplayedName = displayedName;
     }
 
-    public int Id { get; set; }
-    public string Key { get; set; }
-    public string DisplayedName { get; set; }
+    public TypeViewModel(int id, string displayedName)
+    {
+      Id = id;
+      DisplayedName = displayedName;
+    }
   }
 }
