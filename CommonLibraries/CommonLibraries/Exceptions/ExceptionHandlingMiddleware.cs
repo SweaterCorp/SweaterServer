@@ -26,7 +26,7 @@ namespace CommonLibraries.Exceptions
       }
       catch (Exception ex)
       {
-        logger.LogError(ex, ex.Message, "");
+        logger.LogError(ex, ex.Message, ex.InnerException?.Message);
         await HandleExceptionAsync(context, ex);
         if (env.IsDevelopment()) Console.WriteLine(ex);
         throw;
@@ -35,16 +35,16 @@ namespace CommonLibraries.Exceptions
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-      if (context.Response.StatusCode == (int) HttpStatusCode.OK)
-        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+      if (context.Response.StatusCode == (int)HttpStatusCode.OK)
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
       switch (exception)
       {
         case NotFoundException _:
-          context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+          context.Response.StatusCode = (int)HttpStatusCode.NotFound;
           break;
       }
-      var response = new ResponseObject((HttpStatusCode) context.Response.StatusCode, exception.Message,
+      var response = new ResponseObject((HttpStatusCode)context.Response.StatusCode, exception.Message + $"{Environment.NewLine}" + exception.InnerException?.Message,
         exception.StackTrace);
 
       var result = JsonConvert.SerializeObject(response);
