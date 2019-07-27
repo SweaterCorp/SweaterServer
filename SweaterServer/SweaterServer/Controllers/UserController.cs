@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using ProductDatabase.DTOs;
 using ProductDatabase.Repositories;
+using SweaterServer.Models;
 using SweaterServer.ViewModels;
 
 namespace SweaterServer.Controllers
@@ -37,35 +38,28 @@ namespace SweaterServer.Controllers
     /// <summary>
     /// Create new user
     /// </summary>
-    /// <param name="createUser"></param>
+    /// <param name="userInfo"></param>
     /// <returns>Suitable products for the new user.</returns>
     /// <response code="200">Returns list of the suitable products.</response>
     /// <response code="400">If the params for creating are null.</response>        
     [HttpPost]
     [ProducesResponseType(typeof(ResponseObject<List<ProductViewModel>>), 200)]
     [ProducesResponseType(typeof(ResponseObject<ModelStateDictionary>), 400)]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserViewModel createUser)
+    public async Task<IActionResult> CreateUser([FromBody] UserInfo userInfo)
     {
       Logger.LogInformation($"{nameof(UserController)}.{nameof(CreateUser)}.Start");
       if (!ModelState.IsValid) return new BadResponseResult(ModelState);
 
-      var user = await UserDb.GetUser(createUser.PhoneIMEI);
-      if (user == null)
+      var user = await UserDb.GetUser(userInfo.PhoneIMEI);
+      if (user != null)
       {
-        var personalTone =
-          new PersonalColorTypeQualifier().GetPersonalColorType(createUser.EyeColor, createUser.HairColor,
-            createUser.SkinTone);
-        user = await UserDb.CreateUser(createUser.PhoneIMEI, personalTone);
+        var personalTone = new PersonalColorTypeQualifier().GetPersonalColorType(userInfo.EyeColor, userInfo.HairColor,
+            userInfo.SkinTone);
+        user = await UserDb.CreateUser(userInfo.PhoneIMEI, personalTone);
       }
 
-      var result = await FitProducts(new ProductFilterViewModel
-      {
-        CategoryId = CategoryType.BlousesShirts.Id,
-        PersonalColorTypeId = user.PersonalColorTypeId
-      });
-
       Logger.LogInformation($"{nameof(UserController)}.{nameof(CreateUser)}.End");
-      return new OkResponseResult("Fit products.", new { Products = result.Select(ProductViewModel.FromPrdouctDto) });
+      return new OkResponseResult("New user.", user);
     }
 
     /// <summary>
@@ -78,42 +72,35 @@ namespace SweaterServer.Controllers
     [HttpPut]
     [ProducesResponseType(typeof(ResponseObject<List<ProductViewModel>>), 200)]
     [ProducesResponseType(typeof(ResponseObject<ModelStateDictionary>), 400)]
-    public async Task<IActionResult> UpdateUser([FromBody] CreateUserViewModel createUser)
+    public async Task<IActionResult> UpdateUser([FromBody] UserInfo createUser)
     {
       Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUser)}.Start");
       if (!ModelState.IsValid) return new BadResponseResult(ModelState);
 
       var user = await UserDb.GetUser(createUser.PhoneIMEI);
-      if (user == null) return new NotFoundResponseResult("The user with id doesnot exist");
-      var personalTone =
-        new PersonalColorTypeQualifier().GetPersonalColorType(createUser.EyeColor, createUser.HairColor,
-          createUser.SkinTone);
-      user.PersonalColorTypeId = personalTone.Id;
+      if (user == null) return new NotFoundResponseResult("The user with id doesn't exist");
+      var personalTone = new PersonalColorTypeQualifier().GetPersonalColorType(createUser.EyeColor, createUser.HairColor, createUser.SkinTone);
+      user.PersonalColorTypeId = (int) personalTone;
       user = await UserDb.UpdateUser(user);
 
-      var result = await FitProducts(new ProductFilterViewModel
-      {
-        CategoryId = CategoryType.BlousesShirts.Id,
-        PersonalColorTypeId = user.PersonalColorTypeId
-      });
 
       Logger.LogInformation($"{nameof(UserController)}.{nameof(UpdateUser)}.End");
-      return new OkResponseResult("Fit products.", new { Products = result.Select(ProductViewModel.FromPrdouctDto) });
+      return new OkResponseResult("Updated user.", user);
     }
 
     [HttpGet("products")]
-    public async Task<IActionResult> GetProducts([FromQuery] string phoneIMEI,
-      [FromQuery] ProductFilterViewModel filter)
+    public async Task<IActionResult> GetProducts([FromQuery] string phoneImei,
+      [FromQuery] ProductFilter filter)
     {
       Logger.LogInformation($"{nameof(UserController)}.{nameof(GetProducts)}.Start");
       if (!ModelState.IsValid) return new BadResponseResult(ModelState);
 
-      var user = await UserDb.GetUser(phoneIMEI);
-      if (user == null) return new NotFoundResponseResult($"There is no user with phone:{phoneIMEI}");
+      var user = await UserDb.GetUser(phoneImei);
+      if (user == null) return new NotFoundResponseResult($"There is no user with phone:{phoneImei}");
 
-      var result = await FitProducts(new ProductFilterViewModel
+      var result = await FitProducts(new ProductFilter
       {
-        CategoryId = CategoryType.BlousesShirts.Id,
+        CategoryId = (int)CategoryType.BlousesShirts,
         PersonalColorTypeId = user.PersonalColorTypeId
       });
 
@@ -122,7 +109,7 @@ namespace SweaterServer.Controllers
     }
 
 
-    private async Task<List<ProductCardDto>> FitProducts(ProductFilterViewModel productFilterViewModel)
+    private async Task<List<ProductCardDto>> FitProducts(ProductFilter productFilterViewModel)
     {
       var filter = new ProductFilterDto
       {

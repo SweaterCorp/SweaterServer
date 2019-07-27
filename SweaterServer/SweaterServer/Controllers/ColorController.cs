@@ -14,7 +14,7 @@ namespace SweaterServer.Controllers
 {
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]
-  [Route("api/colors")]
+  [Route("colors")]
   [ApiController]
   public class ColorController : ControllerBase
   {

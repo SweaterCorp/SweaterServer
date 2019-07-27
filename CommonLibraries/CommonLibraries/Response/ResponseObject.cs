@@ -4,6 +4,7 @@ namespace CommonLibraries.Response
 {
   public enum HttpStatusCode
   {
+    // ReSharper disable All
     OK = System.Net.HttpStatusCode.OK,
     Created = System.Net.HttpStatusCode.Created,
     NoContent = System.Net.HttpStatusCode.NoContent,

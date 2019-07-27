@@ -32,10 +32,10 @@ namespace ProductDatabase.Repositories
       foreach (var productId in productIds)
         if (!await Db.ProductColorGoodnessEntities.AnyAsync(x => x.ProductId == productId))
         {
-          var autumn = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Autumn.Id };
-          var spring = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Spring.Id };
-          var summer = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Summer.Id };
-          var winter = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = PersonalColorType.Winter.Id };
+          var autumn = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = (int)PersonalColorType.Autumn };
+          var spring = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = (int)PersonalColorType.Spring };
+          var summer = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = (int)PersonalColorType.Summer };
+          var winter = new ProductColorGoodnessEntity { ProductId = productId, PersonalColorTypeId = (int)PersonalColorType.Winter };
 
           newColors.Add(autumn);
           newColors.Add(spring);

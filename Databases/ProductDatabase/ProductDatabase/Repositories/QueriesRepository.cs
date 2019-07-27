@@ -52,7 +52,7 @@ namespace ProductDatabase.Repositories
 
       if (filter.BrandIds.Any()) products = products.Where(x => filter.BrandIds.Contains(x.BrandId));
 
-      var productGoodnesses = Db.ProductColorGoodnessEntities.Where(x => x.PersonalColorTypeId == filter.PersonalColorType.Id);
+      var productGoodnesses = Db.ProductColorGoodnessEntities.Where(x => x.PersonalColorTypeId == (int)filter.PersonalColorType);
 
       var resultQuery = from product in products
         join productColorGoodness in productGoodnesses on product.ProductId equals productColorGoodness.ProductId

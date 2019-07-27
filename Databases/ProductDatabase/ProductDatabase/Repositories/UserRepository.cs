@@ -16,7 +16,7 @@ namespace ProductDatabase.Repositories
 
     public async Task<UserEntity> CreateUser(string phoneImei, PersonalColorType personalColorType)
     {
-      var newUser = new UserEntity {PersonalColorTypeId = personalColorType.Id, PhoneIMEI = phoneImei};
+      var newUser = new UserEntity {PersonalColorTypeId = (int)personalColorType, PhoneIMEI = phoneImei};
       Db.UserEntities.Add(newUser);
       await Db.SaveChangesAsync();
       return newUser;

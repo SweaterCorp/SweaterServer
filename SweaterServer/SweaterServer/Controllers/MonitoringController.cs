@@ -12,7 +12,7 @@ namespace SweaterServer.Controllers
   /// </summary>
   [Produces("application/json")]
   [EnableCors("AllowAllOrigin")]
-  [Route("api/monitoring")]
+  [Route("monitoring")]
   [ApiController]
   public class MonitoringController : ControllerBase
   {
